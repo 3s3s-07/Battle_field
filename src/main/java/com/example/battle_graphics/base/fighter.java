@@ -25,6 +25,8 @@ public abstract class fighter {
         this.lastshoot = lastshoot;
         this.facingright = facingright;
         this.fighterColor=fighterColor;
+        this.fighterShape = null;
+
     }
 
     public double getSpeed() {
@@ -56,7 +58,7 @@ public abstract class fighter {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        this.health = health;//this.health = Math.max(0, health);
     }
 
     public void setName(String name) {
@@ -81,10 +83,12 @@ public abstract class fighter {
 
     public void setX(double x) {
         this.xPosition = x;
+        if (fighterShape != null) fighterShape.setLayoutX(x);
     }
 
     public void setY(double y) {
         this.yPosition = y;
+        if (fighterShape != null) fighterShape.setLayoutX(y);
     }
     public Shape getFighterShape() { return fighterShape; }
     protected Color getFighterColor() { return fighterColor; }
@@ -93,8 +97,8 @@ public abstract class fighter {
         double newX = xPosition;
         double newY = yPosition;
 
-        if (direction.equalsIgnoreCase("UP")) newY += speed;//3aks
-        else if (direction.equalsIgnoreCase("DOWN")) newY -= speed;
+        if (direction.equalsIgnoreCase("UP")) newY -= speed;
+        else if (direction.equalsIgnoreCase("DOWN")) newY += speed;
         else if (direction.equalsIgnoreCase("LEFT")) newX -= speed;
         else if (direction.equalsIgnoreCase("RIGHT")) newX += speed;
 
