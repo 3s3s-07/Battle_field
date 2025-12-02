@@ -90,6 +90,7 @@ public abstract class fighter {
         this.yPosition = y;
         if (fighterShape != null) fighterShape.setLayoutX(y);
     }
+    public abstract void createShape();
     public Shape getFighterShape() { return fighterShape; }
     protected Color getFighterColor() { return fighterColor; }
 
