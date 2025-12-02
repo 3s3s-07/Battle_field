@@ -1,5 +1,7 @@
 package com.example.battle_graphics.base;
-import javafx.scene.shape.Rectangle;
+import javafx.geometry.Bounds;
+import javafx.scene.shape.Shape;
+import javafx.scene.paint.Color;
 public abstract class fighter {
     private String name;
     private int health;
@@ -8,12 +10,12 @@ public abstract class fighter {
     private Weapon currentweapon;
     protected long lastshoot;
     protected boolean facingright;
-    protected Rectangle fighterShape; //momekn n3adel el shape bs lazem n8er el import//
-
+    protected Shape fighterShape;
+    private Color fighterColor; //momekn n3adel el shape bs lazem n8er el import//
     public fighter() {
     }
 
-    public fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot) {
+    public fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot,Color fighterColor) {
         this.name = name;
         this.health = health;
         this.xPosition = x;
@@ -22,7 +24,7 @@ public abstract class fighter {
         this.currentweapon = currentweapon;
         this.lastshoot = lastshoot;
         this.facingright = facingright;
-        this.fighterShape = new Rectangle(x, y, 40, 60);//fighter size//
+        this.fighterColor=fighterColor;
     }
 
     public double getSpeed() {
@@ -84,8 +86,10 @@ public abstract class fighter {
     public void setY(double y) {
         this.yPosition = y;
     }
+    public Shape getFighterShape() { return fighterShape; }
+    protected Color getFighterColor() { return fighterColor; }
 
-    public void move(String direction, double arenaWidth, double halfLineX) {
+    public void move(String direction, double minX, double maxX, double minY, double maxY) {
         double newX = xPosition;
         double newY = yPosition;
 
@@ -94,21 +98,16 @@ public abstract class fighter {
         else if (direction.equalsIgnoreCase("LEFT")) newX -= speed;
         else if (direction.equalsIgnoreCase("RIGHT")) newX += speed;
 
-        if (this instanceof Player1) {
-            if (newX >= 0 && newX <= halfLineX - fighterShape.getWidth()) {
-                xPosition = newX;
-            }
-        } else if (this instanceof Player2) {
-            if (newX >= halfLineX && newX <= arenaWidth - fighterShape.getWidth()) {
-                xPosition = newX;
-            }
+        Bounds bounds = fighterShape.getBoundsInLocal();
+        if (newX >= minX && (newX + bounds.getWidth() <= maxX)) {
+            xPosition = newX;
+            fighterShape.setTranslateX(xPosition);
         }
-
-        yPosition = newY;
-
-        fighterShape.setX(xPosition);
-        fighterShape.setY(yPosition);
-    }
+        if (newY >= minY && (newY + bounds.getHeight() <= maxY)) {
+            yPosition = newY;
+            fighterShape.setTranslateY(yPosition);
+        }
+        }
 
     public Projectile shoot() {
         long currentTime = System.currentTimeMillis();
@@ -118,11 +117,10 @@ public abstract class fighter {
             // تحديث آخر وقت للإطلاق
             lastshoot = currentTime;
 
-            double projectileStartX = xPosition + fighterShape.getWidth();
-
+            double projectileStartX = xPosition + fighterShape.getBoundsInLocal().getWidth();
             return new Projectile(
                     projectileStartX,
-                    yPosition + fighterShape.getHeight() / 2,
+                    yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
                     currentweapon.getDamageValue(),
                     currentweapon.getProjectileSpeed()
             );
