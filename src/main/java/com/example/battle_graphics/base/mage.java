@@ -1,4 +1,5 @@
-package com.example.battle_graphics.Base;
+package com.example.battle_graphics.base;
+
 public class mage extends fighter {
     public mage(String name,int health,double speed){
         super(name,health,speed);

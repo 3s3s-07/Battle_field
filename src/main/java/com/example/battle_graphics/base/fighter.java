@@ -1,4 +1,4 @@
-package com.example.battle_graphics.Base;
+package com.example.battle_graphics.base;
 import javafx.scene.shape.Rectangle;
 public abstract class fighter {
     private String name;
