@@ -132,7 +132,7 @@ public abstract class Fighter {
         //return null;
     //}
 
-    public void decreaseHealth(double damage) {
+    public void decreaseHealth(int damage) {
         this.health -= damage;
         if (this.health < 0) {
             this.health = 0;
