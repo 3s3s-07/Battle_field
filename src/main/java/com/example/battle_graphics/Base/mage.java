@@ -1,9 +1,10 @@
+package com.example.battle_graphics.Base;
 public class mage extends fighter {
-    public mage(){
-        super();
+    public mage(String name,int health,double speed){
+        super(name,health,speed);
         name="mage";
-        health=90;
-        speed=2.5;
+       int health=90;
+        double speed = 2.5;
         currentweapon=new magicwand();
     }
 }

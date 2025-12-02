@@ -1,3 +1,4 @@
+package com.example.battle_graphics.Base;
 public class warrior extends fighter {
 
 
