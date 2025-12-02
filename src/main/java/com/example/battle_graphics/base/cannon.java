@@ -1,19 +1,19 @@
 package com.example.battle_graphics.base;
 
-public class cannon extends weapon {
+public class cannon extends Weapon {
     public cannon() {
-        super("cannon",25, 3.0, (long) 1000);
+        super("cannon", 25, 3.0, (long) 1000);
     }
 
     @Override
-    public Projectile createProjectile(Fighter owner) {
-        public Projectile createProjectile (Fighter owner){
-            return new Projectile(
-                    owner.getFighterShape().getX() + (owner.isFacingRight() ? 40 : -10),
-                    owner.getY + owner.getFighterShape.getBoundsInLocal().getHeight() / 2,
-                    projectileSpeed,
-                    damage,
-                    owner.isFacingRight()
-            );
-        }
+    public Projectile createProjectile(Fighter fighter) {
+        return new Projectile(
+                fighter.getFighterShape().getLayoutX() + (fighter.getFacingright() ? 40 : -10),
+                fighter.getFighterShape().getLayoutY() + fighter.getFighterShape().getBoundsInLocal().getHeight() / 2,
+                projectileSpeed,
+                damage,
+                fighter.getFacingright()
+        );
     }
+}
+

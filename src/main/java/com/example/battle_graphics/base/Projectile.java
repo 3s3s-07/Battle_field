@@ -41,8 +41,8 @@ public class Projectile {
     public boolean checkCollision(Fighter target) {
         if (!active) return false;
 
-        if (shape.getBoundsInParent().intersects(target.getSprite().getBoundsInParent())) {
-            target.takeDamage(damage);
+        if (shape.getBoundsInParent().intersects(target.getFighterShape().getBoundsInParent())) {
+            target.decreaseHealth(damage);
             deactivate();
             return true;
         }

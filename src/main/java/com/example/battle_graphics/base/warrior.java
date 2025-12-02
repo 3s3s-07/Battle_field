@@ -1,10 +1,10 @@
 package com.example.battle_graphics.base;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-public class warrior extends fighter {
+public class warrior extends Fighter {
     public warrior() {}
     public warrior(double x,double y){
-            super("Warrior", 150, x, y, 3, new Sword(), true, 0, Color.DARKRED);
+            super("Warrior", 150, x, y, 3, new Pistol(), true, 0, Color.DARKRED);
         }
         @Override
     public void createShape() {

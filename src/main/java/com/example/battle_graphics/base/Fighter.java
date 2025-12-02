@@ -2,20 +2,20 @@ package com.example.battle_graphics.base;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
-public abstract class fighter {
+public abstract class Fighter {
     private String name;
     private int health;
     private double speed;
    protected double xPosition, yPosition;
-    private Weapon currentweapon;
+    protected Weapon currentweapon;
     protected long lastshoot;
     protected boolean facingright;
     protected Shape fighterShape;
     private Color fighterColor; //momekn n3adel el shape bs lazem n8er el import//
-    public fighter() {
+    public Fighter() {
     }
 
-    public fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot,Color fighterColor) {
+    public Fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot, Color fighterColor) {
         this.name = name;
         this.health = health;
         this.xPosition = x;
@@ -68,6 +68,9 @@ public abstract class fighter {
     public void setFacingright(boolean facingright) {
         this.facingright = facingright;
     }
+    public boolean getFacingright(){
+        return facingright;
+    }
 
     public void setCurrentweapon(Weapon currentweapon) {
         this.currentweapon = currentweapon;
@@ -114,24 +117,20 @@ public abstract class fighter {
         }
         }
 
-    public Projectile shoot() {
-        long currentTime = System.currentTimeMillis();
+   // public Projectile shoot() {
+        //long currentTime = System.currentTimeMillis();
 
-        if (currentTime - lastshoot >= currentweapon.getCooldownTime()) {
+        //if (currentTime - lastshoot >= currentweapon.getCooldown()) {
 
-            // تحديث آخر وقت للإطلاق
-            lastshoot = currentTime;
+          //  lastshoot = currentTime;
 
-            double projectileStartX = xPosition + fighterShape.getBoundsInLocal().getWidth();
-            return new Projectile(
-                    projectileStartX,
-                    yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
-                    currentweapon.getDamageValue(),
-                    currentweapon.getProjectileSpeed()
-            );
-        }
-        return null;
-    }
+            //double projectileStartX = xPosition + fighterShape.getBoundsInLocal().getWidth();
+            //return new Projectile( projectileStartX, yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
+              //      currentweapon.getDamage(), currentweapon.getProjectileSpeed()
+            //);
+        //}
+        //return null;
+    //}
 
     public void decreaseHealth(double damage) {
         this.health -= damage;

@@ -1,10 +1,10 @@
 package com.example.battle_graphics.base;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
-public class Mage extends fighter {
+class Mage extends Fighter {
 
     public Mage(double x, double y) {
-        super("Mage", 90, x, y, 4.5, new FireballStaff(), true, 0, Color.PURPLE);
+        super("Mage", 90, x, y, 4.5, new MagicWand(), true, 0, Color.PURPLE);
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.example.battle_graphics.base;
 
-public class weapon {
+public class Weapon {
 
         protected String name;
         protected int damage;
         protected double projectileSpeed;
         protected long cooldown;
-        public weapon(String name, int damage, double projectilespeed, Long cooldown){
+        public Weapon() {}
+        public Weapon(String name, int damage, double projectilespeed, Long cooldown){
             this.name=name;
             this.damage=damage;
             this.projectileSpeed=projectilespeed;

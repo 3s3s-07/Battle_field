@@ -1,9 +1,9 @@
 package com.example.battle_graphics.base;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-public class archer extends fighter {
+public class archer extends Fighter {
     public archer(double x, double y) {
-        super("Archer", 110, x, y, 4.0, new Bow(), true, 0, Color.FORESTGREEN);
+        super("Archer", 110, x, y, 4.0, new cannon(), true, 0, Color.FORESTGREEN);
     }
     @Override
         public void createShape() {
