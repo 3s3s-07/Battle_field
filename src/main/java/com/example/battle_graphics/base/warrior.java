@@ -5,7 +5,6 @@ public class warrior extends fighter {
     public warrior() {}
     public warrior(double x,double y){
             super("Warrior", 150, x, y, 3, new Sword(), true, 0, Color.DARKRED);
-
         }
         @Override
     public void createShape() {
@@ -15,14 +14,10 @@ public class warrior extends fighter {
     }
 
     public void setPosition(double x, double y) {
-        if (fighterShape != null) {
-            fighterShape.setTranslateX(x);
-            fighterShape.setTranslateY(y);
+        if (this.fighterShape != null) {
+            this.fighterShape.setTranslateX(x);
+            this.fighterShape.setTranslateY(y);
         }
-    }
-
-    public Rectangle getFighterShape() {
-        return fighterShape;
     }
 }
 

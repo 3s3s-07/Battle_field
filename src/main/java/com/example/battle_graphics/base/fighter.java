@@ -6,7 +6,7 @@ public abstract class fighter {
     private String name;
     private int health;
     private double speed;
-    private double xPosition, yPosition;
+   protected double xPosition, yPosition;
     private Weapon currentweapon;
     protected long lastshoot;
     protected boolean facingright;

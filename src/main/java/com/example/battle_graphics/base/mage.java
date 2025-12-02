@@ -4,8 +4,7 @@ import javafx.scene.paint.Color;
 public class Mage extends fighter {
 
     public Mage(double x, double y) {
-        super("Mage", 150, x, y, 3, new Sword(), true, 0, Color.DARKRED);
-        createShape();
+        super("Mage", 90, x, y, 4.5, new FireballStaff(), true, 0, Color.PURPLE);
     }
 
     @Override
@@ -14,7 +13,6 @@ public class Mage extends fighter {
         circle.setFill(getFighterColor());
         circle.setStroke(Color.BLACK);
         this.fighterShape = circle;
-
         this.fighterShape.setTranslateX(xPosition);
         this.fighterShape.setTranslateY(yPosition);
     }
