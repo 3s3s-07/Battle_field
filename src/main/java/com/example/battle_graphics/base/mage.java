@@ -1,9 +1,9 @@
 package com.example.battle_graphics.base;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
-class Mage extends Fighter {
+class mage extends Fighter {
 
-    public Mage(double x, double y) {
+    public mage(double x, double y) {
         super("Mage", 90, x, y, 4.5, new MagicWand(), true, 0, Color.PURPLE);
     }
 
