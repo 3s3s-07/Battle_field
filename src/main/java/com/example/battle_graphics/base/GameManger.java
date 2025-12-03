@@ -19,7 +19,7 @@ public class GameManger {
         this.gamePane = pane;
         this.input = handler;
         this.projectiles = new ArrayList<>();
-        gamePane.getChildren().addAll(player1.getSprite(), player2.getSprite());
+        gamePane.getChildren().addAll(player1.getFighterShape(), player2.getFighterShape());
         startLoop();
     }
     private void startLoop() {
@@ -78,12 +78,12 @@ public class GameManger {
     private void checkCollisions() {
         for (Projectile p : projectiles) {
             if (p.getOwner() == player1) {
-                if (p.getShape().getBoundsInParent().intersects(player2.getSprite().getBoundsInParent())) {
+                if (p.getShape().getBoundsInParent().intersects(player2.getFighterShape().getBoundsInParent())) {
                     player2.takeDamage(p.getDamage());
                     p.deactivate();
                 }
             } else {
-                if (p.getShape().getBoundsInParent().intersects(player1.getSprite().getBoundsInParent())) {
+                if (p.getShape().getBoundsInParent().intersects(player1.getFighterShape().getBoundsInParent())) {
                     player1.takeDamage(p.getDamage());
                     p.deactivate();
                 }
