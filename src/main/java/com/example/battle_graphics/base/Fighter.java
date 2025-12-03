@@ -1,143 +1,90 @@
 package com.example.battle_graphics.base;
-import javafx.geometry.Bounds;
 import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
+import javafx.geometry.Bounds;
 public abstract class Fighter {
-    private String name;
-    private int health;
-    private double speed;
-   protected double xPosition, yPosition;
-    protected Weapon currentweapon;
-    protected long lastshoot;
-    protected boolean facingright;
+
+    // 1. الخصائص (Fields) - Encapsulation:
+    private double health;
+    protected double xPosition;
+    protected double yPosition;
+    private Weapon currentWeapon;
+    private final Color fighterColor;
+    private double movementSpeed = 4.0;
+    private long lastShotTime = 0;
+    private final int playerSide; // 1 for Player 1 (Right direction), -1 for Player 2 (Left direction)
+
     protected Shape fighterShape;
-    private Color fighterColor; //momekn n3adel el shape bs lazem n8er el import//
-    public Fighter() {
-    }
 
-    public Fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot, Color fighterColor) {
-        this.name = name;
-        this.health = health;
+    // 2. Constructor:
+    public Fighter(double initialHealth, double x, double y, Weapon initialWeapon, Color color, int side) {
+        this.health = initialHealth;
         this.xPosition = x;
         this.yPosition = y;
-        this.speed = speed;
-        this.currentweapon = currentweapon;
-        this.lastshoot = lastshoot;
-        this.facingright = facingright;
-        this.fighterColor=fighterColor;
-        this.fighterShape = null;
-
+        this.currentWeapon = initialWeapon;
+        this.fighterColor = color;
+        this.playerSide = side;
     }
 
-    public double getSpeed() {
-        return speed;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public double getX() {
-        return xPosition;
-    }
-
-    public double getY() {
-        return yPosition;
-    }
-
-    public Weapon getCurrentweapon() {
-        return currentweapon;
-    }
-
-    public long getLastshoot() {
-        return lastshoot;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;//this.health = Math.max(0, health);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setFacingright(boolean facingright) {
-        this.facingright = facingright;
-    }
-    public boolean getFacingright(){
-        return facingright;
-    }
-
-    public void setCurrentweapon(Weapon currentweapon) {
-        this.currentweapon = currentweapon;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public void setLastshoot(long lastshoot) {
-        this.lastshoot = lastshoot;
-    }
-
-    public void setX(double x) {
-        this.xPosition = x;
-        if (fighterShape != null) fighterShape.setLayoutX(x);
-    }
-
-    public void setY(double y) {
-        this.yPosition = y;
-        if (fighterShape != null) fighterShape.setLayoutX(y);
-    }
+    // 3. الدوال المجردة (Abstract Methods) - Abstraction:
+    public abstract void specialAbility();
     public abstract void createShape();
-    public Shape getFighterShape() { return fighterShape; }
-    protected Color getFighterColor() { return fighterColor; }
 
+    // 4. دالة الحركة (Concrete Method):
     public void move(String direction, double minX, double maxX, double minY, double maxY) {
         double newX = xPosition;
         double newY = yPosition;
 
-        if (direction.equalsIgnoreCase("UP")) newY -= speed;
-        else if (direction.equalsIgnoreCase("DOWN")) newY += speed;
-        else if (direction.equalsIgnoreCase("LEFT")) newX -= speed;
-        else if (direction.equalsIgnoreCase("RIGHT")) newX += speed;
+        if (direction.equalsIgnoreCase("UP")) newY -= movementSpeed;
+        else if (direction.equalsIgnoreCase("DOWN")) newY += movementSpeed;
+        else if (direction.equalsIgnoreCase("LEFT")) newX -= movementSpeed;
+        else if (direction.equalsIgnoreCase("RIGHT")) newX += movementSpeed;
 
         Bounds bounds = fighterShape.getBoundsInLocal();
+        // التحقق من الحدود الأفقية
         if (newX >= minX && (newX + bounds.getWidth() <= maxX)) {
             xPosition = newX;
             fighterShape.setTranslateX(xPosition);
         }
+        // التحقق من الحدود العمودية
         if (newY >= minY && (newY + bounds.getHeight() <= maxY)) {
             yPosition = newY;
             fighterShape.setTranslateY(yPosition);
         }
-        }
-
-   // public Projectile shoot() {
-        //long currentTime = System.currentTimeMillis();
-
-        //if (currentTime - lastshoot >= currentweapon.getCooldown()) {
-
-          //  lastshoot = currentTime;
-
-            //double projectileStartX = xPosition + fighterShape.getBoundsInLocal().getWidth();
-            //return new Projectile( projectileStartX, yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
-              //      currentweapon.getDamage(), currentweapon.getProjectileSpeed()
-            //);
-        //}
-        //return null;
-    //}
-
-    public void decreaseHealth(int damage) {
-        this.health -= damage;
-        if (this.health < 0) {
-            this.health = 0;
-        }
-
     }
 
+    // 5. دالة إطلاق النار (مع Cooldown):
+    public Projectile shoot() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastShotTime >= currentWeapon.getCooldownTime()) {
+            lastShotTime = currentTime;
+
+            // تحديد موقع الإطلاق واتجاهه بناءً على playerSide
+            double startOffset = (playerSide == 1) ? fighterShape.getBoundsInLocal().getWidth() : 0;
+            double projectileStartX = xPosition + startOffset;
+
+            return new Projectile(
+                    projectileStartX,
+                    yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
+                    currentWeapon.getDamageValue(),
+                    currentWeapon.getProjectileSpeed(),
+                    playerSide // تمرير الاتجاه
+            );
+        }
+        return null;
+    }
+
+    // 6. دالة تقليل الصحة:
+    public void decreaseHealth(double damage) {
+        this.health -= damage;
+        if (this.health < 0) this.health = 0;
+    }
+
+    // 7. Getters & Setters
+    public double getHealth() { return health; }
+    public Shape getFighterShape() { return fighterShape; }
+    protected Color getFighterColor() { return fighterColor; }
+    public void setWeapon(Weapon newWeapon) { this.currentWeapon = newWeapon; }
+    protected void setMovementSpeed(double speed) { this.movementSpeed = speed; }
+    public int getPlayerSide() { return playerSide; }
 }

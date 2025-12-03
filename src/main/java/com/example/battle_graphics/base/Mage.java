@@ -1,12 +1,13 @@
 package com.example.battle_graphics.base;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
-class Mage extends Fighter {
-
-    public Mage(double x, double y) {
-        super("Mage", 90, x, y, 4.5, new MagicWand(), true, 0, Color.PURPLE);
+public class Mage extends Fighter {
+    public Mage(double x, double y, int side) {
+        // الوراثة: 90 HP، السلاح: FireballStaff، اللون: أرجواني، الجانب: side
+        super(90, x, y, new MagicWand(), Color.PURPLE, side);
+        setMovementSpeed(4.5);
+        createShape();
     }
-
     @Override
     public void createShape() {
         Circle circle = new Circle(25);
@@ -16,4 +17,6 @@ class Mage extends Fighter {
         this.fighterShape.setTranslateX(xPosition);
         this.fighterShape.setTranslateY(yPosition);
     }
+    @Override
+    public void specialAbility() { /* ... */ }
 }

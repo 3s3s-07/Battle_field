@@ -1,73 +1,42 @@
 package com.example.battle_graphics.base;
-
+import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class Projectile {
 
-    private double x, y;
-    private double speed;
-    private int damage;
-    private boolean directionRight;
-    private boolean active = true;
-    private Fighter owner;
+    private final double damage;
+    private final double speed;
+    private double xPosition;
+    private double yPosition;
+    private final int direction;
+    private final Shape projectileShape;
 
-    private Rectangle shape;
-
-    public Projectile(double x, double y, double speed, int damage, boolean directionRight) {
-        this.x = x;
-        this.y = y;
-        this.speed = speed;
+    public Projectile(double x, double y, double damage, double speed, int direction) {
+        this.xPosition = x;
+        this.yPosition = y;
         this.damage = damage;
-        this.directionRight = directionRight;
+        this.speed = speed;
+        this.direction = direction;
 
-        shape = new Rectangle(12, 4, Color.BLACK);
-        shape.setX(x);
-        shape.setY(y);
+        this.projectileShape = new Circle(5, Color.RED);
+        this.projectileShape.setTranslateX(x);
+        this.projectileShape.setTranslateY(y);
     }
 
-    public void update() {
-        if (!active) return;
-
-        if (directionRight) {
-            x += speed;
-        } else {
-            x -= speed;
-        }
-
-        shape.setX(x);
+    public void updatePosition() {
+        this.xPosition += this.speed * this.direction;
+        this.projectileShape.setTranslateX(this.xPosition);
     }
 
-    public boolean checkCollision(Fighter target) {
-        if (!active) return false;
-
-        if (shape.getBoundsInParent().intersects(target.getFighterShape().getBoundsInParent())) {
-            target.decreaseHealth(damage);
-            deactivate();
-            return true;
-        }
-        return false;
+    public boolean checkCollision(Shape opponentShape) {
+        return projectileShape.getBoundsInParent().intersects(opponentShape.getBoundsInParent());
     }
 
-    public boolean isOutOfBounds() {
-        return x < 0 || x > 800;
-    }
+    // Getters
+    public double getDamage() { return damage; }
+    public Shape getShape() { return projectileShape; }
+    public double getXPosition() { return xPosition; }
+    public int getDirection() { return direction; }
 
-    public Rectangle getShape() {
-        return shape;
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void deactivate() {
-        this.active = false;
-        shape.setVisible(false);
-    }
 }
-

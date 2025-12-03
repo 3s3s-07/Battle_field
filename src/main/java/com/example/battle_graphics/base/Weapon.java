@@ -1,50 +1,21 @@
 package com.example.battle_graphics.base;
 
-public class Weapon {
+public abstract class Weapon {
 
-        protected String name;
-        protected int damage;
-        protected double projectileSpeed;
-        protected long cooldown;
-        public Weapon() {}
-        public Weapon(String name, int damage, double projectilespeed, Long cooldown){
-            this.name=name;
-            this.damage=damage;
-            this.projectileSpeed=projectilespeed;
-            this.cooldown=cooldown;
-        }
+    private final String name;
+    private final double damageValue;
+    private final double projectileSpeed;
+    private final long cooldownTime;
 
-        public String getName() {
-            return name;
-        }
-
-        public int getDamage() {
-            return damage;
-        }
-
-        public double getProjectileSpeed() {
-            return projectileSpeed;
-        }
-
-        public long getCooldown() {
-            return cooldown;
-        }
-        public void setName(String name) {
+    public Weapon(String name, double damage, double speed, long cooldown) {
         this.name = name;
-        }
-
-        public void setDamage(int damage) {
-        this.damage = damage;
-         }
-         public void setProjectileSpeed(double projectileSpeed) {
-        this.projectileSpeed = projectileSpeed;}
-
-       public void setCooldown(long cooldown) {
-        this.cooldown = cooldown;
-        }
-        public Projectile createProjectile(Fighter owner) {
-        return null;
+        this.damageValue = damage;
+        this.projectileSpeed = speed;
+        this.cooldownTime = cooldown;
     }
+    // Getters (Encapsulation)
+    public double getDamageValue() { return damageValue; }
+    public double getProjectileSpeed() { return projectileSpeed; }
+    public long getCooldownTime() { return cooldownTime; }
+    public String getName() { return name; }
 }
-
-
