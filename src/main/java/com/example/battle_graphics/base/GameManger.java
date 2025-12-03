@@ -5,7 +5,7 @@ import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameEngine {
+public class GameManger {
 
     private Fighter player1;
     private Fighter player2;
