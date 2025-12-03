@@ -1,10 +1,14 @@
 package com.example.battle_graphics.base;
-
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 public class GameManger {
 
     private Fighter player1;
@@ -13,6 +17,8 @@ public class GameManger {
     private List<Projectile> projectiles;
     private InputHandler input;
     private AnimationTimer gameLoop;
+    private final ProgressBar hp1;
+    private final ProgressBar hp2;
     public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler) {
         this.player1 = p1;
         this.player2 = p2;
@@ -89,6 +95,10 @@ public class GameManger {
                 }
             }
         }
+    }
+    private void updateHealthBars() {
+        hp1.setProgress((double)player1.getHealth() / 120.0);
+        hp2.setProgress((double)player2.getHealth() / 120.0); // using 120 as top for simplicity
     }
     private void checkWinner() {
         if (!player1.isAlive()) {
