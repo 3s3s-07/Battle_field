@@ -19,11 +19,13 @@ public class GameManger {
     private AnimationTimer gameLoop;
     private final ProgressBar hp1;
     private final ProgressBar hp2;
-    public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler) {
+    public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler, ProgressBar hp1, ProgressBar hp2) {
         this.player1 = p1;
         this.player2 = p2;
         this.gamePane = pane;
         this.input = handler;
+        this.hp1 = hp1;
+        this.hp2 = hp2;
         this.projectiles = new ArrayList<>();
         gamePane.getChildren().addAll(player1.getFighterShape(), player2.getFighterShape());
         startLoop();
@@ -43,30 +45,6 @@ public class GameManger {
         updateProjectiles();
         checkCollisions();
         checkWinner();
-    }
-    private void handleMovement() {
-        if (input.isWPressed()) player1.moveUp();
-        if (input.isSPressed()) player1.moveDown();
-        if (input.isAPressed()) player1.moveLeft();
-        if (input.isDPressed()) player1.moveRight();
-        if (input.isUpPressed()) player2.moveUp();
-        if (input.isDownPressed()) player2.moveDown();
-        if (input.isLeftPressed()) player2.moveLeft();
-        if (input.isRightPressed()) player2.moveRight();
-    }
-    private void handleShooting() {
-        if (input.isFPressed() && TimerUtil.canShoot(player1.lastShotTime, player1.getWeapon().getCooldown())) {
-            Projectile p = player1.getWeapon().createProjectile(player1);
-            projectiles.add(p);
-            gamePane.getChildren().add(p.getShape());
-            player1.lastShotTime = System.currentTimeMillis();
-        }
-        if (input.isLPressed() && TimerUtil.canShoot(player2.lastShotTime, player2.getWeapon().getCooldown())) {
-            Projectile p = player2.getWeapon().createProjectile(player2);
-            projectiles.add(p);
-            gamePane.getChildren().add(p.getShape());
-            player2.lastShotTime = System.currentTimeMillis();
-        }
     }
     private void updateProjectiles() {
         List<Projectile> toRemove = new ArrayList<>();
@@ -98,7 +76,7 @@ public class GameManger {
     }
     private void updateHealthBars() {
         hp1.setProgress((double)player1.getHealth() / 120.0);
-        hp2.setProgress((double)player2.getHealth() / 120.0); // using 120 as top for simplicity
+        hp2.setProgress((double)player2.getHealth() / 120.0);
     }
     private void checkWinner() {
         if (!player1.isAlive()) {
