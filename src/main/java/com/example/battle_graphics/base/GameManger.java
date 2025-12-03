@@ -40,8 +40,7 @@ public class GameManger {
         gameLoop.start();
     }
     private void update() {
-        handleMovement();
-        handleShooting();
+        input.handleMovement();
         updateProjectiles();
         checkCollisions();
         checkWinner();
