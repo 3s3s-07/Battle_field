@@ -1,6 +1,5 @@
 package com.example.battle_graphics.fx;
 import com.example.battle_graphics.base.Fighter;
-import com.example.battle_graphics.base.warrior;
 import com.example.battle_graphics.base.Projectile;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;

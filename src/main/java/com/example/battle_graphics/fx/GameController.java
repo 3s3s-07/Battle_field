@@ -115,7 +115,31 @@ public class GameController {
     }
 
     private void displayWinner() {
-        // ... منطق عرض رسالة الفائز على الشاشة
+        String winnerName;
+
+        // تحديد الفائز
+        if (player1.getHealth() <= 0 && player2.getHealth() > 0) {
+            // يمكن أن يكون اللاعب 1 أي من الفئات (Warrior, Mage, Archer)
+            winnerName = "Player 2 (" + player2.getClass().getSimpleName() + ") WINS!";
+        } else if (player2.getHealth() <= 0 && player1.getHealth() > 0) {
+            winnerName = "Player 1 (" + player1.getClass().getSimpleName() + ") WINS!";
+        } else {
+            // حالة التعادل (كلاهما وصل للصفر في نفس الإطار)
+            winnerName = "DRAW!";
+        }
+
+        // إنشاء Label لعرض الرسالة
+        javafx.scene.control.Label winnerLabel = new javafx.scene.control.Label(winnerName);
+        winnerLabel.setStyle("-fx-font-size: 48px; -fx-text-fill: gold; -fx-font-weight: bold; -fx-background-color: rgba(0, 0, 0, 0.7); -fx-padding: 20px;");
+
+        // وضع الـ Label في منتصف الـ Pane
+        winnerLabel.setPrefSize(arenaWidth, arenaHeight);
+        winnerLabel.setAlignment(javafx.geometry.Pos.CENTER);
+
+        // إضافة الـ Label إلى الساحة
+        gameArena.getChildren().add(winnerLabel);
+
+        // يمكنك هنا أيضًا عرض زر للبدء مرة أخرى
     }
 
     public void addProjectile(Projectile p) {

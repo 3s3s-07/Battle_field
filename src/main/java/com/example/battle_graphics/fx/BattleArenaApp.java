@@ -25,7 +25,7 @@ public class BattleArenaApp extends Application {
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
-        primaryStage.setTitle("JavaFX Battle Arena Game");
+        primaryStage.setTitle("Battle Arena Game");
 
         // عرض Scene 1: شاشة اختيار الشخصيات
         primaryStage.setScene(createSelectionScene());
@@ -38,11 +38,11 @@ public class BattleArenaApp extends Application {
 
         ComboBox<String> p1Selector = new ComboBox<>();
         p1Selector.getItems().addAll(fighters);
-        p1Selector.setValue("Warrior"); // اختيار افتراضي
+        p1Selector.setValue("none"); // اختيار افتراضي
 
         ComboBox<String> p2Selector = new ComboBox<>();
         p2Selector.getItems().addAll(fighters);
-        p2Selector.setValue("Mage"); // اختيار افتراضي
+        p2Selector.setValue("none"); // اختيار افتراضي
 
         Label p1Label = new Label("Player 1 (W,A,S,D, F):");
         Label p2Label = new Label("Player 2 (Arrows, L):");
