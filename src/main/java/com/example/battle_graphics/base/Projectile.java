@@ -49,6 +49,14 @@ public class Projectile {
         return false;
     }
 
+    public Fighter getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Fighter owner) {
+        this.owner = owner;
+    }
+
     public boolean isOutOfBounds() {
         return x < 0 || x > 800;
     }

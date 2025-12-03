@@ -96,7 +96,9 @@ public abstract class Fighter {
     public abstract void createShape();
     public Shape getFighterShape() { return fighterShape; }
     protected Color getFighterColor() { return fighterColor; }
-
+    public boolean isAlive() {
+        return health > 0;
+    }
     public void move(String direction, double minX, double maxX, double minY, double maxY) {
         double newX = xPosition;
         double newY = yPosition;
