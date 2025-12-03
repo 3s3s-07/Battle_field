@@ -123,4 +123,13 @@ public class GameManger {
             }
         }
     }
-}
+    private void checkWinner() {
+        if (!player1.isAlive()) {
+            System.out.println("Player 2 Wins!");
+            gameLoop.stop();
+        }
+        if (!player2.isAlive()) {
+            System.out.println("Player 1 Wins!");
+            gameLoop.stop();
+        }
+}}
