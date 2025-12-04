@@ -19,11 +19,13 @@ public class GameManger {
     private AnimationTimer gameLoop;
     private final ProgressBar hp1;
     private final ProgressBar hp2;
-    public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler) {
+    public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler, ProgressBar hp1, ProgressBar hp2) {
         this.player1 = p1;
         this.player2 = p2;
         this.gamePane = pane;
         this.input = handler;
+        this.hp1 = hp1;
+        this.hp2 = hp2;
         this.projectiles = new ArrayList<>();
         gamePane.getChildren().addAll(player1.getFighterShape(), player2.getFighterShape());
         startLoop();
@@ -41,7 +43,9 @@ public class GameManger {
         input.handleMovement();
         updateProjectiles();
         checkCollisions();
+        updateHealthBars();
         checkWinner();
+
     }
     private void updateProjectiles() {
         List<Projectile> toRemove = new ArrayList<>();
@@ -60,12 +64,12 @@ public class GameManger {
         for (Projectile p : projectiles) {
             if (p.getOwner() == player1) {
                 if (p.getShape().getBoundsInParent().intersects(player2.getFighterShape().getBoundsInParent())) {
-                    player2.takeDamage(p.getDamage());
+                    player2.decreaseHealth(p.getDamage());
                     p.deactivate();
                 }
             } else {
                 if (p.getShape().getBoundsInParent().intersects(player1.getFighterShape().getBoundsInParent())) {
-                    player1.takeDamage(p.getDamage());
+                    player1.decreaseHealth(p.getDamage());
                     p.deactivate();
                 }
             }
