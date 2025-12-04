@@ -77,7 +77,7 @@ public class GameManger {
     }
     private void updateHealthBars() {
         hp1.setProgress((double)player1.getHealth() / 120.0);
-        hp2.setProgress((double)player2.getHealth() / 120.0); // using 120 as top for simplicity
+        hp2.setProgress((double)player2.getHealth() / 120.0);
     }
     private void checkWinner() {
         if (!player1.isAlive()) {
