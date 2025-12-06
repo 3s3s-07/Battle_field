@@ -28,6 +28,7 @@ public abstract class Fighter {
         this.fighterShape = null;
 
     }
+    public abstract void createShape();
 
     public double getSpeed() {
         return speed;
@@ -93,7 +94,7 @@ public abstract class Fighter {
         this.yPosition = y;
         if (fighterShape != null) fighterShape.setLayoutX(y);
     }
-    public abstract void createShape();
+
     public Shape getFighterShape() { return fighterShape; }
     protected Color getFighterColor() { return fighterColor; }
     public boolean isAlive() {
@@ -119,20 +120,22 @@ public abstract class Fighter {
         }
         }
 
-   // public Projectile shoot() {
-        //long currentTime = System.currentTimeMillis();
-
-        //if (currentTime - lastshoot >= currentweapon.getCooldown()) {
-
-          //  lastshoot = currentTime;
-
-            //double projectileStartX = xPosition + fighterShape.getBoundsInLocal().getWidth();
-            //return new Projectile( projectileStartX, yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
-              //      currentweapon.getDamage(), currentweapon.getProjectileSpeed()
-            //);
-        //}
-        //return null;
-    //}
+    public Projectile shoot() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastshoot >= currentweapon.getCooldown()) {
+            lastshoot= currentTime;
+            double startOffset = (facingright == true) ? fighterShape.getBoundsInLocal().getWidth() : 0;
+            double projectileStartX = xPosition + startOffset;
+            return new Projectile(
+                    projectileStartX,
+                    yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
+                    currentweapon.getProjectileSpeed(),
+                    currentweapon.getDamage(),
+                    facingright
+            );
+        }
+        return null;
+    }
 
     public void decreaseHealth(int damage) {
         this.health -= damage;

@@ -1,5 +1,4 @@
 package com.example.battle_graphics.base;
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -10,9 +9,8 @@ public class Projectile {
     private int damage;
     private boolean directionRight;
     private boolean active = true;
-    private Fighter owner;
-
     private Rectangle shape;
+    private Fighter Owner;
 
     public Projectile(double x, double y, double speed, int damage, boolean directionRight) {
         this.x = x;
@@ -28,13 +26,11 @@ public class Projectile {
 
     public void update() {
         if (!active) return;
-
         if (directionRight) {
             x += speed;
         } else {
             x -= speed;
         }
-
         shape.setX(x);
     }
 
@@ -47,14 +43,6 @@ public class Projectile {
             return true;
         }
         return false;
-    }
-
-    public Fighter getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Fighter owner) {
-        this.owner = owner;
     }
 
     public boolean isOutOfBounds() {
@@ -76,6 +64,9 @@ public class Projectile {
     public void deactivate() {
         this.active = false;
         shape.setVisible(false);
+    }
+
+    public Fighter getOwner() { return Owner;
     }
 }
 

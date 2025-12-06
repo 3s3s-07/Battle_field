@@ -4,9 +4,9 @@ public class Weapon {
 
         protected String name;
         protected int damage;
-        protected double projectileSpeed;
+        private double projectileSpeed;
         protected long cooldown;
-        public Weapon() {}
+
         public Weapon(String name, int damage, double projectilespeed, Long cooldown){
             this.name=name;
             this.damage=damage;
@@ -29,22 +29,6 @@ public class Weapon {
         public long getCooldown() {
             return cooldown;
         }
-        public void setName(String name) {
-        this.name = name;
-        }
-
-        public void setDamage(int damage) {
-        this.damage = damage;
-         }
-         public void setProjectileSpeed(double projectileSpeed) {
-        this.projectileSpeed = projectileSpeed;}
-
-       public void setCooldown(long cooldown) {
-        this.cooldown = cooldown;
-        }
-        public Projectile createProjectile(Fighter owner) {
-        return null;
-    }
 }
 
 
