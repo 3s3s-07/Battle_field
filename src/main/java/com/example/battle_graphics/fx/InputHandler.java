@@ -13,12 +13,12 @@ public class InputHandler {
     private final Set<KeyCode> activeKeys = new HashSet<>();
     private final Fighter player1;
     private final Fighter player2;
-    private final GameController gameController;
+    private final GameManger GameManger;
 
-    public InputHandler(Fighter p1, Fighter p2, GameController controller) {
+    public InputHandler(Fighter p1, Fighter p2, GameManger controller) {
         this.player1 = p1;
         this.player2 = p2;
-        this.gameController = controller;
+        this.GameManger = controller;
     }
 
     public void handleKeyPressed(KeyEvent event) {
@@ -26,10 +26,10 @@ public class InputHandler {
 
         if (event.getCode() == KeyCode.F) {
             Projectile p = player1.shoot();
-            if (p != null) gameController.addProjectile(p);
+            if (p != null) GameManger.addProjectile(p);
         } else if (event.getCode() == KeyCode.L) {
             Projectile p = player2.shoot();
-            if (p != null) gameController.addProjectile(p);
+            if (p != null) GameManger.addProjectile(p);
         }
     }
 
@@ -38,8 +38,8 @@ public class InputHandler {
     }
 
     public void handleMovement() {
-        double arenaWidth = gameController.getArenaWidth();
-        double arenaHeight = gameController.getArenaHeight();
+        double arenaWidth = GameManger.getArenawidth();
+        double arenaHeight = GameManger.getArenaheight();
         double halfLineX = arenaWidth / 2;
 
         double p1MaxX = halfLineX;

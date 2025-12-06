@@ -1,13 +1,11 @@
-package com.example.battle_graphics.base;
+package com.example.battle_graphics.fx;
+import com.example.battle_graphics.base.Fighter;
+import com.example.battle_graphics.base.Projectile;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 public class GameManger {
 
@@ -19,17 +17,38 @@ public class GameManger {
     private AnimationTimer gameLoop;
     private final ProgressBar hp1;
     private final ProgressBar hp2;
-    public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler, ProgressBar hp1, ProgressBar hp2) {
+    private  final double arenawidth;
+    private  final double arenaheight;
+    public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler, ProgressBar hp1, ProgressBar hp2, double arenawidth, double arenaheight) {
         this.player1 = p1;
         this.player2 = p2;
         this.gamePane = pane;
         this.input = handler;
         this.hp1 = hp1;
         this.hp2 = hp2;
+        this.arenawidth = arenawidth;
+        this.arenaheight = arenaheight;
         this.projectiles = new ArrayList<>();
         gamePane.getChildren().addAll(player1.getFighterShape(), player2.getFighterShape());
         startLoop();
     }
+
+    public Pane getGamePane() {
+        return gamePane;
+    }
+
+    public InputHandler getInput() {
+        return input;
+    }
+
+    public double getArenawidth() {
+        return arenawidth;
+    }
+
+    public double getArenaheight() {
+        return arenaheight;
+    }
+
     private void startLoop() {
         gameLoop = new AnimationTimer() {
             @Override
@@ -47,6 +66,9 @@ public class GameManger {
         checkWinner();
 
     }
+    public void addProjectile(Projectile p) {
+        projectiles.add(p);
+        gamePane.getChildren().add(p.getShape());}
     private void updateProjectiles() {
         List<Projectile> toRemove = new ArrayList<>();
         for (Projectile p : projectiles) {
@@ -88,5 +110,6 @@ public class GameManger {
             System.out.println("Player 1 Wins!");
             gameLoop.stop();
         }
+
 }
 }
