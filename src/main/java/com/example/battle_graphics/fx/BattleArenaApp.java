@@ -119,6 +119,8 @@ public class BattleArenaApp extends Application {
                 WIDTH,
                 HEIGHT
         );
+        handler.setGameController(manager);
+
 
         // Connect handler to manager
         // (InputHandler already receives manager inside constructor)

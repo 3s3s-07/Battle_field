@@ -13,7 +13,7 @@ public class InputHandler {
     private final Set<KeyCode> activeKeys = new HashSet<>();
     private final Fighter player1;
     private final Fighter player2;
-    private final GameManger gameController;
+    private GameManger gameController;
 
     public InputHandler(Fighter p1, Fighter p2, GameManger controller) {
         this.player1 = p1;
@@ -55,5 +55,8 @@ public class InputHandler {
         if (activeKeys.contains(KeyCode.DOWN)) player2.move("DOWN", p2MinX, arenaWidth, 0, arenaHeight);
         if (activeKeys.contains(KeyCode.LEFT)) player2.move("LEFT", p2MinX, arenaWidth, 0, arenaHeight);
         if (activeKeys.contains(KeyCode.RIGHT)) player2.move("RIGHT", p2MinX, arenaWidth, 0, arenaHeight);
+    }
+    public void setGameController(GameManger gm) {
+        this.gameController= gm;
     }
 }
