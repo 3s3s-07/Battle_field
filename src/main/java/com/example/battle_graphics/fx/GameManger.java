@@ -29,6 +29,8 @@ public class GameManger {
         this.arenawidth = arenawidth;
         this.arenaheight = arenaheight;
         this.projectiles = new ArrayList<>();
+        if (this.input != null) {
+            this.input.setGameController(this);}
         gamePane.getChildren().addAll(player1.getFighterShape(), player2.getFighterShape());
         startLoop();
     }
@@ -112,4 +114,7 @@ public class GameManger {
         }
 
 }
+    public void startGameLoop() {
+        gameLoop.start();
+    }
 }
