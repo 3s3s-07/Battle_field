@@ -31,7 +31,9 @@ public class GameManger {
         this.projectiles = new ArrayList<>();
         gamePane.getChildren().addAll(player1.getFighterShape(), player2.getFighterShape());
         startLoop();
-    }
+        if (this.input != null) {
+            this.input.setGameController(this);
+    }}
 
     public Pane getGamePane() {
         return gamePane;
