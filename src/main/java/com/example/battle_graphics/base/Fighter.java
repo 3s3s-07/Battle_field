@@ -140,7 +140,6 @@ public abstract class Fighter {
                     currentweapon.getDamage(),
                     facingright,
                     this
-
             );
         }
         return null;
