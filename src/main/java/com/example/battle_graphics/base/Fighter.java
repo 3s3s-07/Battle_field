@@ -138,7 +138,8 @@ public abstract class Fighter {
                     yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
                     currentweapon.getProjectileSpeed(),
                     currentweapon.getDamage(),
-                    facingright
+                    facingright,
+                    this
 
             );
         }
