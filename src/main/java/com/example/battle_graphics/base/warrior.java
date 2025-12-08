@@ -4,21 +4,17 @@ import javafx.scene.shape.Rectangle;
 public class warrior extends Fighter {
 
     public warrior(double x,double y){
-            super("Warrior", 150, x, y, 3, new Pistol(), true, 0, Color.DARKRED);
-        }
-        @Override
+        super("Warrior", 150, x, y, 3, new Pistol(), true, 0, Color.DARKRED);
+    }
+    @Override
     public void createShape() {
-        fighterShape = new Rectangle(60, 80);
-        fighterShape.setFill(getFighterColor());
-        fighterShape.setStroke(Color.DARKRED);
+        Rectangle r = new Rectangle(60, 80);
+        r.setFill(getFighterColor());
+        r.setStroke(Color.DARKRED);
+        this.fighterShape = r;
+        this.fighterShape.setTranslateX(xPosition);
+        this.fighterShape.setTranslateY(yPosition);
     }
 
-    public void setPosition(double x, double y) {
-        if (this.fighterShape != null) {
-            this.fighterShape.setTranslateX(x);
-            this.fighterShape.setTranslateY(y);
-        }
+
     }
-}
-
-

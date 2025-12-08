@@ -26,12 +26,14 @@ public class BattleArenaApp extends Application {
         this.primaryStage = stage;
         primaryStage.setTitle("Battle Arena – Character Select");
 
-
+        // Load first screen (selection)
         primaryStage.setScene(createSelectionScene());
         primaryStage.show();
     }
 
-
+    // ------------------------------------------
+    // 1) Character Selection Screen
+    // ------------------------------------------
     private Scene createSelectionScene() {
 
         ComboBox<String> p1Select = new ComboBox<>();
@@ -47,6 +49,9 @@ public class BattleArenaApp extends Application {
         startButton.setOnAction(e -> {
             Fighter p1 = createFighter(p1Select.getValue(), 100, HEIGHT / 2);
             Fighter p2 = createFighter(p2Select.getValue(), WIDTH - 150, HEIGHT / 2);
+
+            // Make player2 face left so its shots travel toward player1
+            p2.setFacingright(false);
 
             primaryStage.setScene(createGameScene(p1, p2));
         });
@@ -65,7 +70,9 @@ public class BattleArenaApp extends Application {
         return new Scene(root, WIDTH, HEIGHT);
     }
 
-
+    // ------------------------------------------
+    // 2) Create Fighter from dropdown selection
+    // ------------------------------------------
     private Fighter createFighter(String type, double x, double y) {
         switch (type) {
             case "Mage": return new mage(x, y);
@@ -74,18 +81,20 @@ public class BattleArenaApp extends Application {
         }
     }
 
-
+    // ------------------------------------------
+    // 3) Create Game Scene with GameManger
+    // ------------------------------------------
     private Scene createGameScene(Fighter p1, Fighter p2) {
 
-
+        // Create fighter shapes
         p1.createShape();
         p2.createShape();
 
-
+        // Arena Pane
         Pane gamePane = new Pane();
         gamePane.setPrefSize(WIDTH, HEIGHT);
 
-
+        // Health bars
         ProgressBar hp1 = new ProgressBar(1.0);
         ProgressBar hp2 = new ProgressBar(1.0);
 
@@ -100,10 +109,10 @@ public class BattleArenaApp extends Application {
 
         gamePane.getChildren().addAll(hp1, hp2);
 
-
+        // InputHandler created BEFORE GameManger but without controller (will be set)
         InputHandler handler = new InputHandler(p1, p2, null);
 
-
+        // Create GameManger, pass a callback that will return to the selection scene when "Play Again" is pressed.
         GameManger manager = new GameManger(
                 p1, p2,
                 gamePane,
@@ -111,17 +120,25 @@ public class BattleArenaApp extends Application {
                 hp1,
                 hp2,
                 WIDTH,
-                HEIGHT
+                HEIGHT,
+                () -> {
+                    // ensure UI update happens on FX thread
+                    javafx.application.Platform.runLater(() -> {
+                        primaryStage.setScene(createSelectionScene());
+                    });
+                }
         );
         handler.setGameController(manager);
 
+        // Create scene and attach key handlers to the Scene so key events are delivered reliably.
+        Scene scene = new Scene(gamePane, WIDTH, HEIGHT);
+        scene.setOnKeyPressed(handler::handleKeyPressed);
+        scene.setOnKeyReleased(handler::handleKeyReleased);
 
-
-        gamePane.setOnKeyPressed(handler::handleKeyPressed);
-        gamePane.setOnKeyReleased(handler::handleKeyReleased);
+        // Make sure the pane can receive focus and request it so keyboard events are received.
         gamePane.setFocusTraversable(true);
         gamePane.requestFocus();
 
-        return new Scene(gamePane, WIDTH, HEIGHT);
+        return scene;
     }
 }

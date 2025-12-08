@@ -7,13 +7,11 @@ public class archer extends Fighter {
     }
     @Override
     public void createShape() {
-        fighterShape = new Polygon(0, 50, 25, 0,50, 50);
-        fighterShape.setFill(getFighterColor());
+        Polygon poly = new Polygon(0, 50, 25, 0,50, 50);
+        poly.setFill(getFighterColor());
+        this.fighterShape = poly;
+        this.fighterShape.setTranslateX(xPosition);
+        this.fighterShape.setTranslateY(yPosition);
     }
-    public void setPosition(double x, double y) {
-        if (fighterShape != null) {
-            fighterShape.setTranslateX(x);
-            fighterShape.setTranslateY(y);
-        }
+
     }
-}

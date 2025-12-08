@@ -35,16 +35,6 @@ public class Projectile {
         shape.setX(x);
     }
 
-    public boolean checkCollision(Fighter target) {
-        if (!active) return false;
-
-        if (shape.getBoundsInParent().intersects(target.getFighterShape().getBoundsInParent())) {
-            target.decreaseHealth(damage);
-            deactivate();
-            return true;
-        }
-        return false;
-    }
 
     public boolean isOutOfBounds() {
         return x < 0 || x > 800;
@@ -67,6 +57,7 @@ public class Projectile {
         shape.setVisible(false);
     }
 
-    public Fighter getOwner() { return owner;
+    public Fighter getOwner() {
+        return owner;
     }
 }

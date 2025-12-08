@@ -30,69 +30,9 @@ public abstract class Fighter {
     }
     public abstract void createShape();
 
-    public double getSpeed() {
-        return speed;
-    }
-
-    public String getName() {
-        return name;
-    }
 
     public int getHealth() {
         return health;
-    }
-
-    public double getX() {
-        return xPosition;
-    }
-
-    public double getY() {
-        return yPosition;
-    }
-
-    public Weapon getCurrentweapon() {
-        return currentweapon;
-    }
-
-    public long getLastshoot() {
-        return lastshoot;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;//this.health = Math.max(0, health);
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setFacingright(boolean facingright) {
-        this.facingright = facingright;
-    }
-    public boolean getFacingright(){
-        return facingright;
-    }
-
-    public void setCurrentweapon(Weapon currentweapon) {
-        this.currentweapon = currentweapon;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public void setLastshoot(long lastshoot) {
-        this.lastshoot = lastshoot;
-    }
-
-    public void setX(double x) {
-        this.xPosition = x;
-        if (fighterShape != null) fighterShape.setTranslateX(x);
-    }
-
-    public void setY(double y) {
-        this.yPosition = y;
-        if (fighterShape != null) fighterShape.setTranslateY(y);
     }
 
     public Shape getFighterShape() { return fighterShape; }
@@ -108,6 +48,13 @@ public abstract class Fighter {
         else if (direction.equalsIgnoreCase("DOWN")) newY += speed;
         else if (direction.equalsIgnoreCase("LEFT")) newX -= speed;
         else if (direction.equalsIgnoreCase("RIGHT")) newX += speed;
+
+        // Update facing direction when moving left/right so projectiles fire correctly
+        if (direction.equalsIgnoreCase("LEFT")) {
+            this.facingright = false;
+        } else if (direction.equalsIgnoreCase("RIGHT")) {
+            this.facingright = true;
+        }
 
         if (fighterShape == null) {
             // nothing to translate yet
@@ -128,6 +75,9 @@ public abstract class Fighter {
     }
 
     public Projectile shoot() {
+        // guard: make sure shape and weapon exist
+        if (fighterShape == null || currentweapon == null) return null;
+
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastshoot >= currentweapon.getCooldown()) {
             lastshoot= currentTime;
@@ -140,7 +90,6 @@ public abstract class Fighter {
                     currentweapon.getDamage(),
                     facingright,
                     this
-
             );
         }
         return null;
@@ -154,4 +103,14 @@ public abstract class Fighter {
 
     }
 
+    public void setFacingright(boolean b) {
+    }
+
+    public double getX() {
+        return xPosition;
+    }
+
+    public double getY() {
+        return yPosition;
+    }
 }

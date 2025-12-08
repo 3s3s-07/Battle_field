@@ -26,10 +26,14 @@ public class InputHandler {
 
         if (event.getCode() == KeyCode.F) {
             Projectile p = player1.shoot();
-            if (p != null) gameController.addProjectile(p);
+            if (p != null && gameController != null) {
+                gameController.addProjectile(p);
+            }
         } else if (event.getCode() == KeyCode.L) {
             Projectile p = player2.shoot();
-            if (p != null) gameController.addProjectile(p);
+            if (p != null && gameController != null) {
+                gameController.addProjectile(p);
+            }
         }
     }
 
@@ -38,13 +42,16 @@ public class InputHandler {
     }
 
     public void handleMovement() {
+        // guard in case the controller isn't set yet
+        if (gameController == null) return;
+
         double arenaWidth = gameController.getArenawidth();
         double arenaHeight = gameController.getArenaheight();
         double halfLineX = arenaWidth / 2;
 
-        double p1MaxX = halfLineX;
+        double p1MaxX = arenaWidth;
 
-        double p2MinX = halfLineX;
+        double p2MinX = 0;
 
         if (activeKeys.contains(KeyCode.W)) player1.move("UP", 0, p1MaxX, 0, arenaHeight);
         if (activeKeys.contains(KeyCode.S)) player1.move("DOWN", 0, p1MaxX, 0, arenaHeight);
@@ -59,4 +66,6 @@ public class InputHandler {
     public void setGameController(GameManger gm) {
         this.gameController= gm;
     }
+    private double getArenaWidthSafe() {
+        return (gameController == null) ? 0 : gameController.getArenawidth();}
 }
