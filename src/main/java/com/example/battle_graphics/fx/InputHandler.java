@@ -48,8 +48,8 @@ public class InputHandler {
         double arenaHeight = gameController.getArenaheight();
         double halfLineX = arenaWidth / 2;
 
-        double p1MaxX = halfLineX;
-        double p2MinX = halfLineX;
+        double p1MaxX = arenaWidth;
+        double p2MinX = 0;
 
         if (activeKeys.contains(KeyCode.W)) player1.move("UP", 0, p1MaxX, 0, arenaHeight);
         if (activeKeys.contains(KeyCode.S)) player1.move("DOWN", 0, p1MaxX, 0, arenaHeight);
