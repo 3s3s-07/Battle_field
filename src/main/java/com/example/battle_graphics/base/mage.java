@@ -3,8 +3,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 public class mage extends Fighter {
 
-    public mage(double x, double y) {
-        super("Mage", 90, x, y, 4.5, new MagicWand(), true, 0, Color.PURPLE);
+    public mage(double x, double y,int facingRight) {
+        super("Mage", 90, x, y, new MagicWand(),4.5 , Color.BLUE, facingRight);
+   createShape();
     }
 
     @Override

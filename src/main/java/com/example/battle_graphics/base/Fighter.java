@@ -1,32 +1,28 @@
 package com.example.battle_graphics.base;
 import javafx.geometry.Bounds;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
 public abstract class Fighter {
     private String name;
     private int health;
-    private double speed;
+    private double speed=5.0;
     protected double xPosition, yPosition;
     protected Weapon currentweapon;
-    protected long lastshoot;
-    protected boolean facingright;
+    private long lastshoot=0;
+    protected int facingright;
     protected Shape fighterShape;
     private Color fighterColor; //momekn n3adel el shape bs lazem n8er el import//
-    public Fighter() {
-    }
 
-    public Fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot, Color fighterColor) {
+    public Fighter(String name, int health, double x, double y,Weapon currentweapon , double speed,Color fighterColor , int facingright) {
         this.name = name;
         this.health = health;
         this.xPosition = x;
         this.yPosition = y;
-        this.speed = speed;
         this.currentweapon = currentweapon;
-        this.lastshoot = lastshoot;
         this.facingright = facingright;
         this.fighterColor=fighterColor;
-        this.fighterShape = null;
-
+       this.fighterShape=null;
     }
     public abstract void createShape();
 
@@ -66,10 +62,10 @@ public abstract class Fighter {
         this.name = name;
     }
 
-    public void setFacingright(boolean facingright) {
+    public void setFacingright(int facingright) {
         this.facingright = facingright;
     }
-    public boolean getFacingright(){
+    public int getFacingright(){
         return facingright;
     }
 
@@ -109,18 +105,13 @@ public abstract class Fighter {
         else if (direction.equalsIgnoreCase("LEFT")) newX -= speed;
         else if (direction.equalsIgnoreCase("RIGHT")) newX += speed;
 
-        if (fighterShape == null) {
-            // nothing to translate yet
-            if (newX >= minX && newX <= maxX) xPosition = newX;
-            if (newY >= minY && newY <= maxY) yPosition = newY;
-            return;
-        }
-
         Bounds bounds = fighterShape.getBoundsInLocal();
+        // التحقق من الحدود الأفقية
         if (newX >= minX && (newX + bounds.getWidth() <= maxX)) {
             xPosition = newX;
             fighterShape.setTranslateX(xPosition);
         }
+        // التحقق من الحدود العمودية
         if (newY >= minY && (newY + bounds.getHeight() <= maxY)) {
             yPosition = newY;
             fighterShape.setTranslateY(yPosition);
@@ -131,15 +122,14 @@ public abstract class Fighter {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastshoot >= currentweapon.getCooldown()) {
             lastshoot= currentTime;
-            double startOffset = (facingright == true) ? fighterShape.getBoundsInLocal().getWidth() : 0;
+            double startOffset = (facingright == 1) ? fighterShape.getBoundsInLocal().getWidth() : 0;
             double projectileStartX = xPosition + startOffset;
             return new Projectile(
                     projectileStartX,
                     yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
-                    currentweapon.getProjectileSpeed(),
                     currentweapon.getDamage(),
-                    facingright,
-                    this
+                    currentweapon.getProjectileSpeed(),
+                    facingright
             );
         }
         return null;

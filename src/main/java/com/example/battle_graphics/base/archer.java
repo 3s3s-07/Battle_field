@@ -2,18 +2,16 @@ package com.example.battle_graphics.base;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 public class archer extends Fighter {
-    public archer(double x, double y) {
-        super("Archer", 110, x, y, 4.0, new cannon(), true, 0, Color.FORESTGREEN);
+    public archer(double x, double y,int facingright) {
+        super("Archer", 100, x, y, new cannon(),4.0 , Color.PURPLE, facingright);
+    createShape();
     }
     @Override
     public void createShape() {
         fighterShape = new Polygon(0, 50, 25, 0,50, 50);
         fighterShape.setFill(getFighterColor());
-    }
-    public void setPosition(double x, double y) {
-        if (fighterShape != null) {
-            fighterShape.setTranslateX(x);
-            fighterShape.setTranslateY(y);
-        }
+        fighterShape.setStroke(Color.BLACK);
+        this.fighterShape.setTranslateX(xPosition);
+        this.fighterShape.setTranslateY(yPosition);
     }
 }
