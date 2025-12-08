@@ -6,7 +6,7 @@ public abstract class Fighter {
     private String name;
     private int health;
     private double speed;
-   protected double xPosition, yPosition;
+    protected double xPosition, yPosition;
     protected Weapon currentweapon;
     protected long lastshoot;
     protected boolean facingright;
@@ -87,12 +87,12 @@ public abstract class Fighter {
 
     public void setX(double x) {
         this.xPosition = x;
-        if (fighterShape != null) fighterShape.setLayoutX(x);
+        if (fighterShape != null) fighterShape.setTranslateX(x);
     }
 
     public void setY(double y) {
         this.yPosition = y;
-        if (fighterShape != null) fighterShape.setLayoutX(y);
+        if (fighterShape != null) fighterShape.setTranslateY(y);
     }
 
     public Shape getFighterShape() { return fighterShape; }
@@ -109,6 +109,13 @@ public abstract class Fighter {
         else if (direction.equalsIgnoreCase("LEFT")) newX -= speed;
         else if (direction.equalsIgnoreCase("RIGHT")) newX += speed;
 
+        if (fighterShape == null) {
+            // nothing to translate yet
+            if (newX >= minX && newX <= maxX) xPosition = newX;
+            if (newY >= minY && newY <= maxY) yPosition = newY;
+            return;
+        }
+
         Bounds bounds = fighterShape.getBoundsInLocal();
         if (newX >= minX && (newX + bounds.getWidth() <= maxX)) {
             xPosition = newX;
@@ -118,7 +125,7 @@ public abstract class Fighter {
             yPosition = newY;
             fighterShape.setTranslateY(yPosition);
         }
-        }
+    }
 
     public Projectile shoot() {
         long currentTime = System.currentTimeMillis();
@@ -132,6 +139,7 @@ public abstract class Fighter {
                     currentweapon.getProjectileSpeed(),
                     currentweapon.getDamage(),
                     facingright
+
             );
         }
         return null;
