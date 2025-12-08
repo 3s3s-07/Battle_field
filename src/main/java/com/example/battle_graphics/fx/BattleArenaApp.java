@@ -1,97 +1,127 @@
 package com.example.battle_graphics.fx;
-import com.example.battle_graphics.base.Fighter;
-import com.example.battle_graphics.base.archer;
-import com.example.battle_graphics.base.mage;
-import com.example.battle_graphics.base.warrior;
-import com.example.battle_graphics.base.archer;
-import com.example.battle_graphics.base.mage;
+
+import com.example.battle_graphics.base.*;
 import javafx.application.Application;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-import javafx.scene.layout.*;
-import javafx.scene.control.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class BattleArenaApp extends Application {
 
-    private final double WIDTH = 800;
+    private final double WIDTH = 900;
     private final double HEIGHT = 600;
 
     private Stage primaryStage;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
-        primaryStage.setTitle("Battle Arena Game");
+        primaryStage.setTitle("Battle Arena – Character Select");
 
-        // عرض Scene 1: شاشة اختيار الشخصيات
+
         primaryStage.setScene(createSelectionScene());
         primaryStage.show();
     }
 
+
     private Scene createSelectionScene() {
-        // خيارات المقاتلين
-        String[] fighters = {"Warrior", "Mage", "Archer"};
 
-        ComboBox<String> p1Selector = new ComboBox<>();
-        p1Selector.getItems().addAll(fighters);
-        p1Selector.setValue("none"); // اختيار افتراضي
+        ComboBox<String> p1Select = new ComboBox<>();
+        p1Select.getItems().addAll("Warrior", "Mage", "Archer");
+        p1Select.setValue("Warrior");
 
-        ComboBox<String> p2Selector = new ComboBox<>();
-        p2Selector.getItems().addAll(fighters);
-        p2Selector.setValue("none"); // اختيار افتراضي
+        ComboBox<String> p2Select = new ComboBox<>();
+        p2Select.getItems().addAll("Warrior", "Mage", "Archer");
+        p2Select.setValue("Archer");
 
-        Label p1Label = new Label("Player 1 (W,A,S,D, F):");
-        Label p2Label = new Label("Player 2 (Arrows, L):");
+        Button startButton = new Button("Start Battle");
 
-        Button startGameButton = new Button("Start Game");
-        startGameButton.setOnAction(e -> {
-            Fighter p1 = createFighter(p1Selector.getValue(), 50, HEIGHT / 2, 1); // موقع اللاعب 1 على اليسار، الاتجاه 1
-            Fighter p2 = createFighter(p2Selector.getValue(), WIDTH - 90, HEIGHT / 2, -1); // موقع اللاعب 2 على اليمين، الاتجاه -1
+        startButton.setOnAction(e -> {
+            Fighter p1 = createFighter(p1Select.getValue(), 100, HEIGHT / 2);
+            Fighter p2 = createFighter(p2Select.getValue(), WIDTH - 150, HEIGHT / 2);
+
             primaryStage.setScene(createGameScene(p1, p2));
         });
 
-        VBox layout = new VBox(20);
-        layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(50));
-        layout.getChildren().addAll(
-                new Label("--- Select Your Fighters ---"),
-                new HBox(10, p1Label, p1Selector),
-                new HBox(10, p2Label, p2Selector),
-                startGameButton
+        VBox root = new VBox(25);
+        root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(40));
+
+        root.getChildren().addAll(
+                new Label("🎮 Select Fighters"),
+                new HBox(10, new Label("Player 1:"), p1Select),
+                new HBox(10, new Label("Player 2:"), p2Select),
+                startButton
         );
 
-        return new Scene(layout, WIDTH, HEIGHT);
+        return new Scene(root, WIDTH, HEIGHT);
     }
 
-    // دالة مساعدة لإنشاء المقاتل بناءً على الاختيار
-    private Fighter createFighter(String type, double x, double y, boolean side) {
+
+    private Fighter createFighter(String type, double x, double y) {
         switch (type) {
-            case "Warrior": return new warrior(x, y);
-            case "Mage": return new mage(x,y);
+            case "Mage": return new mage(x, y);
             case "Archer": return new archer(x, y);
-            default: return new warrior(x, y); // افتراضي
+            default: return new warrior(x, y);
         }
     }
 
-    // دالة لإنشاء مشهد اللعب
+
     private Scene createGameScene(Fighter p1, Fighter p2) {
-        GameManger Manger = new GameManger(p1,p2,WIDTH, HEIGHT);
 
-        Scene gameScene = new Scene(Manger.getGamePane(), WIDTH, HEIGHT);
 
-        // ربط InputHandler بالمشهد
-        gameScene.setOnKeyPressed(Manger.getInput()::handleKeyPressed);
-        gameScene.setOnKeyReleased(Manger.getInput()::handleKeyReleased);
+        p1.createShape();
+        p2.createShape();
 
-        // بدء حلقة اللعبة
-        Manger.startGameLoop();
 
-        return gameScene;
+        Pane gamePane = new Pane();
+        gamePane.setPrefSize(WIDTH, HEIGHT);
+
+
+        ProgressBar hp1 = new ProgressBar(1.0);
+        ProgressBar hp2 = new ProgressBar(1.0);
+
+        hp1.setPrefWidth(200);
+        hp2.setPrefWidth(200);
+
+        hp1.setLayoutX(20);
+        hp1.setLayoutY(20);
+
+        hp2.setLayoutX(WIDTH - 220);
+        hp2.setLayoutY(20);
+
+        gamePane.getChildren().addAll(hp1, hp2);
+
+
+        InputHandler handler = new InputHandler(p1, p2, null);
+
+
+        GameManger manager = new GameManger(
+                p1, p2,
+                gamePane,
+                handler,
+                hp1,
+                hp2,
+                WIDTH,
+                HEIGHT
+        );
+        handler.setGameController(manager);
+
+
+
+        gamePane.setOnKeyPressed(handler::handleKeyPressed);
+        gamePane.setOnKeyReleased(handler::handleKeyReleased);
+        gamePane.setFocusTraversable(true);
+        gamePane.requestFocus();
+
+        return new Scene(gamePane, WIDTH, HEIGHT);
     }
 }
