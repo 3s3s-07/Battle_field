@@ -59,7 +59,4 @@ public class InputHandler {
     public void setGameController(GameManger gm) {
         this.gameController= gm;
     }
-    private double getArenaWidthSafe() {
-        return (gameController == null) ? 0 : gameController.getArenawidth();
-    }
 }
