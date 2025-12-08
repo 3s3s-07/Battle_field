@@ -29,13 +29,22 @@ public class GameManger {
         this.arenawidth = arenawidth;
         this.arenaheight = arenaheight;
         this.projectiles = new ArrayList<>();
-        if (this.input != null) {
-            this.input.setGameController(this);}
+
+        // Ensure fighter shapes exist and are positioned based on fighter coordinates
+        if (player1.getFighterShape() != null) {
+            player1.getFighterShape().setTranslateX(player1.getX());
+            player1.getFighterShape().setTranslateY(player1.getY());
+        }
+        if (player2.getFighterShape() != null) {
+            player2.getFighterShape().setTranslateX(player2.getX());
+            player2.getFighterShape().setTranslateY(player2.getY());
+        }
+
         gamePane.getChildren().addAll(player1.getFighterShape(), player2.getFighterShape());
         startLoop();
         if (this.input != null) {
             this.input.setGameController(this);
-    }}
+        }}
 
     public Pane getGamePane() {
         return gamePane;
@@ -115,8 +124,5 @@ public class GameManger {
             gameLoop.stop();
         }
 
-}
-    public void startGameLoop() {
-        gameLoop.start();
     }
 }
