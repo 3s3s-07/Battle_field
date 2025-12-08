@@ -38,14 +38,6 @@ public class GameManger {
             }
         };
     }
-    private void setupArena() {
-        // إضافة خط المنتصف
-        javafx.scene.shape.Line midline = new javafx.scene.shape.Line(arenawidth / 2, 0, arenawidth / 2, arenaheight);
-        midline.setStroke(Color.DARKRED);
-        midline.setStrokeWidth(2);
-
-        gamePane.getChildren().addAll(midline, player1.getFighterShape(), player2.getFighterShape(), hp1, hp2);
-    }
 
     public Pane getGamePane() {
         return gamePane;
@@ -161,4 +153,18 @@ public class GameManger {
 
         // يمكنك هنا أيضًا عرض زر للبدء مرة أخرى
     }
+    public void setupArena() {
+        javafx.scene.shape.Line midline = new javafx.scene.shape.Line(
+                arenawidth / 2, 0, arenawidth / 2, arenaheight
+        );
+        midline.setStroke(Color.DARKRED);
+        midline.setStrokeWidth(2);
+
+        gamePane.getChildren().addAll(midline,
+                player1.getFighterShape(),
+                player2.getFighterShape(),
+                hp1, hp2
+        );
+    }
+
 }

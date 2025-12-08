@@ -77,7 +77,7 @@ public class BattleArenaApp extends Application {
 
     private Scene createGameScene(Fighter p1, Fighter p2) {
         GameManger gameController = new GameManger(WIDTH, HEIGHT, p1, p2);
-
+        gameController.setupArena();
         Scene gameScene = new Scene(gameController.getGamePane(), WIDTH, HEIGHT);
 
         // ربط InputHandler بالمشهد

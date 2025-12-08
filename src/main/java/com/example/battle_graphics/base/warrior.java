@@ -5,7 +5,8 @@ public class warrior extends Fighter {
 
     public warrior(double x,double y,int facingRight){
             super("Warrior", 150, x, y, new Pistol(),3 , Color.PINK, facingRight);
-        }
+        createShape();
+    }
         @Override
     public void createShape() {
         fighterShape = new Rectangle(60, 80);
