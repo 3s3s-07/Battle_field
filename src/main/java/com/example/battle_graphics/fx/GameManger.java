@@ -16,7 +16,6 @@ import javafx.geometry.Pos;
 import javafx.scene.text.Font;
 import javafx.scene.effect.DropShadow;
 import javafx.util.Duration;
-
 import java.util.ArrayList;
 import java.util.List;
 public class GameManger {
@@ -143,8 +142,8 @@ public class GameManger {
         }
     }
     private void updateHealthBars() {
-        hp1.setProgress((double)player1.getHealth() / 120.0);
-        hp2.setProgress((double)player2.getHealth() / 120.0);
+        hp1.setProgress((double)player1.getHealth() / player1.getMaxHp());
+        hp2.setProgress((double)player2.getHealth() / player2.getMaxHp());
     }
     private void checkWinner() {
         if (!player1.isAlive()) {
