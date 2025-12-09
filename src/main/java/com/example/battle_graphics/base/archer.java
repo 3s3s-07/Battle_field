@@ -2,6 +2,7 @@ package com.example.battle_graphics.base;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 
 public class archer extends Fighter {
 
@@ -15,10 +16,7 @@ public class archer extends Fighter {
 
     @Override
     public void createShape() {
-        Polygon poly = new Polygon(0, 50, 25, 0, 50, 50);
-        poly.setFill(getFighterColor());
-        this.fighterShape = poly;
-        this.fighterShape.setTranslateX(getX());
-        this.fighterShape.setTranslateY(getY());
+        Shape s = SoldierShapeFactory.createSoldier(getFighterColor(), xPosition, yPosition);
+        this.fighterShape = s;
     }
 }

@@ -2,6 +2,7 @@ package com.example.battle_graphics.base;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 
 public class mage extends Fighter {
 
@@ -14,11 +15,7 @@ public class mage extends Fighter {
 
     @Override
     public void createShape() {
-        Circle circle = new Circle(25);
-        circle.setFill(getFighterColor());
-        circle.setStroke(Color.BLACK);
-        this.fighterShape = circle;
-        this.fighterShape.setTranslateX(getX());
-        this.fighterShape.setTranslateY(getY());
+        Shape s = SoldierShapeFactory.createSoldier(getFighterColor(), xPosition, yPosition);
+        this.fighterShape = s;
     }
 }

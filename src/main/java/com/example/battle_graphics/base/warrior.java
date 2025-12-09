@@ -2,6 +2,7 @@ package com.example.battle_graphics.base;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class warrior extends Fighter {
 
@@ -14,11 +15,7 @@ public class warrior extends Fighter {
 
     @Override
     public void createShape() {
-        Rectangle r = new Rectangle(60, 80);
-        r.setFill(getFighterColor());
-        r.setStroke(Color.DARKRED);
-        this.fighterShape = r;
-        this.fighterShape.setTranslateX(getX());
-        this.fighterShape.setTranslateY(getY());
+        Shape s = SoldierShapeFactory.createSoldier(getFighterColor(), xPosition, yPosition);
+        this.fighterShape = s;
     }
 }
