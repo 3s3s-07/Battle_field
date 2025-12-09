@@ -1,4 +1,5 @@
 package com.example.battle_graphics.fx;
+
 import com.example.battle_graphics.base.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -14,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.text.Font;
+import javafx.scene.shape.Shape;
 
 public class BattleArenaApp extends Application {
 
@@ -41,19 +43,24 @@ public class BattleArenaApp extends Application {
         title.setTextFill(Color.web("#ffffff"));
         title.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6,0,0,2);");
 
-        Label subtitle = new Label("SHOOT AND RUN!");
+        Label subtitle = new Label("Two-player local combat. Choose fighters and battle!");
         subtitle.setFont(Font.font("Arial", 18));
         subtitle.setTextFill(Color.web("#dddddd"));
 
         Button startBtn = new Button("Start");
         startBtn.setPrefWidth(180);
         startBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
-        startBtn.setOnAction(e -> primaryStage.setScene(createSelectionScene()));
+        // updated call site to renamed method
+        startBtn.setOnAction(e -> {
+            System.out.println("Start (title) pressed");
+            primaryStage.setScene(buildSelectionScene());
+        });
 
         Button howToBtn = new Button("How to Play");
         howToBtn.setPrefWidth(180);
         howToBtn.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;");
-        howToBtn.setOnAction(e -> showHowToPlay());
+        // updated call site to renamed method
+        howToBtn.setOnAction(e -> buildHowToPlay());
 
         Button exitBtn = new Button("Exit");
         exitBtn.setPrefWidth(180);
@@ -73,7 +80,8 @@ public class BattleArenaApp extends Application {
     }
 
     // Simple informational dialog laid out as a Scene replacement (keeps it lightweight)
-    private void showHowToPlay() {
+    // renamed to avoid potential name collisions
+    private void buildHowToPlay() {
         Label header = new Label("How to Play");
         header.setFont(Font.font("Arial", 28));
         header.setTextFill(Color.WHITE);
@@ -105,9 +113,9 @@ public class BattleArenaApp extends Application {
     }
 
     // ------------------------------------------
-    // 1) Character Selection Screen
+    // 1) Character Selection Screen (renamed)
     // ------------------------------------------
-    private Scene createSelectionScene() {
+    private Scene buildSelectionScene() {
 
         ComboBox<String> p1Select = new ComboBox<>();
         p1Select.getItems().addAll("Warrior", "Mage", "Archer");
@@ -117,9 +125,22 @@ public class BattleArenaApp extends Application {
         p2Select.getItems().addAll("Warrior", "Mage", "Archer");
         p2Select.setValue("Archer");
 
-        Button startButton = new Button("Start Battle");
+        // Make title visible on dark background and labels readable
+        Label titleLabel = new Label("🎮 Select Fighters");
+        titleLabel.setFont(Font.font("Arial", 22));
+        titleLabel.setTextFill(Color.web("#ffffff"));
 
+        Label p1Label = new Label("Player 1:");
+        p1Label.setTextFill(Color.web("#ffffff"));
+        Label p2Label = new Label("Player 2:");
+        p2Label.setTextFill(Color.web("#ffffff"));
+
+        Button startButton = new Button("Start Battle");
+        startButton.setStyle("-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;");
+
+        // add a debug print to verify the button handler fires
         startButton.setOnAction(e -> {
+            System.out.println("Start Battle pressed (selection)");
             Fighter p1 = createFighter(p1Select.getValue(), 100, HEIGHT / 2);
             Fighter p2 = createFighter(p2Select.getValue(), WIDTH - 150, HEIGHT / 2);
 
@@ -129,16 +150,20 @@ public class BattleArenaApp extends Application {
             primaryStage.setScene(createGameScene(p1, p2));
         });
 
-        VBox root = new VBox(25);
+        VBox controls = new VBox(12);
+        controls.setAlignment(Pos.CENTER);
+
+        HBox p1Row = new HBox(8, p1Label, p1Select);
+        p1Row.setAlignment(Pos.CENTER);
+        HBox p2Row = new HBox(8, p2Label, p2Select);
+        p2Row.setAlignment(Pos.CENTER);
+
+        controls.getChildren().addAll(p1Row, p2Row, startButton);
+
+        VBox root = new VBox(25, titleLabel, controls);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(40));
-
-        root.getChildren().addAll(
-                new Label("🎮 Select Fighters"),
-                new HBox(10, new Label("Player 1:"), p1Select),
-                new HBox(10, new Label("Player 2:"), p2Select),
-                startButton
-        );
+        root.setStyle("-fx-background-color: linear-gradient(#2c3e50, #1a252f);");
 
         return new Scene(root, WIDTH, HEIGHT);
     }
@@ -199,7 +224,8 @@ public class BattleArenaApp extends Application {
                 () -> {
                     // ensure UI update happens on FX thread
                     javafx.application.Platform.runLater(() -> {
-                        primaryStage.setScene(createSelectionScene());
+                        // updated to call renamed selection builder
+                        primaryStage.setScene(buildSelectionScene());
                     });
                 }
         );
