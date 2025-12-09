@@ -1,5 +1,4 @@
 package com.example.battle_graphics.fx;
-
 import com.example.battle_graphics.base.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -42,7 +41,7 @@ public class BattleArenaApp extends Application {
         title.setTextFill(Color.web("#ffffff"));
         title.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6,0,0,2);");
 
-        Label subtitle = new Label("Two-player local combat. Choose fighters and battle!");
+        Label subtitle = new Label("SHOOT AND RUN!");
         subtitle.setFont(Font.font("Arial", 18));
         subtitle.setTextFill(Color.web("#dddddd"));
 
