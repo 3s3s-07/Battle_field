@@ -18,5 +18,7 @@ public class archer extends Fighter {
     public void createShape() {
         Shape s = SoldierShapeFactory.createSoldier(getFighterColor(), xPosition, yPosition);
         this.fighterShape = s;
+        fighterShape.setScaleX(3.5);
+        fighterShape.setScaleY(2.5);
     }
 }
