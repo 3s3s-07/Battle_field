@@ -1,65 +1,77 @@
 package com.example.battle_graphics.base;
+
 import javafx.geometry.Bounds;
-import javafx.scene.shape.Shape;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Fighter {
+
     private String name;
     private int health;
-    private int MaxHp;
+    private int maxHp;
     private double speed;
     protected double xPosition, yPosition;
-    protected Weapon currentweapon;
-    protected long lastshoot;
-    protected boolean facingright;
+    protected boolean facingRight;
     protected Shape fighterShape;
-    private Color fighterColor; //momekn n3adel el shape bs lazem n8er el import//
-    public Fighter() {
-    }
+    private Color fighterColor;
+    private List<Weapon> weapons = new ArrayList<>();
+    private int currentWeaponIndex = 0;
+    protected long lastShoot;
 
-    public Fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot, Color fighterColor,int MaxHp) {
+    public Fighter() {}
+
+    public Fighter(String name, int health, double x, double y, double speed, boolean facingRight, long lastShoot, Color color, int maxHp) {
         this.name = name;
         this.health = health;
         this.xPosition = x;
         this.yPosition = y;
         this.speed = speed;
-        this.MaxHp=MaxHp;
-        this.currentweapon = currentweapon;
-        this.lastshoot = lastshoot;
-        this.facingright = facingright;
-        this.fighterColor=fighterColor;
+        this.facingRight = facingRight;
+        this.lastShoot = lastShoot;
+        this.fighterColor = color;
         this.fighterShape = null;
-
+        this.maxHp = maxHp;
     }
-    public abstract void createShape();
 
+    public abstract void createShape();
 
     public int getHealth() {
         return health;
     }
 
-    public Shape getFighterShape() { return fighterShape; }
-    protected Color getFighterColor() { return fighterColor; }
-    public boolean isAlive() {
-        return health>0;
+    public Shape getFighterShape() {
+        return fighterShape;
     }
+
+    protected Color getFighterColor() {
+        return fighterColor;
+    }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
     public void move(String direction, double minX, double maxX, double minY, double maxY) {
         double newX = xPosition;
         double newY = yPosition;
 
-        if (direction.equalsIgnoreCase("UP")) newY -= speed;
-        else if (direction.equalsIgnoreCase("DOWN")) newY += speed;
-        else if (direction.equalsIgnoreCase("LEFT")) newX -= speed;
-        else if (direction.equalsIgnoreCase("RIGHT")) newX += speed;
-
-        // Update facing direction when moving left/right so projectiles fire correctly
-        if (direction.equalsIgnoreCase("LEFT")) {
-            this.facingright = false;
-        } else if (direction.equalsIgnoreCase("RIGHT")) {
-            this.facingright = true;
+        switch (direction.toUpperCase()) {
+            case "UP" -> newY -= speed;
+            case "DOWN" -> newY += speed;
+            case "LEFT" -> {
+                newX -= speed;
+                facingRight = false;
+            }
+            case "RIGHT" -> {
+                newX += speed;
+                facingRight = true;
+            }
         }
 
         if (fighterShape == null) {
-            // nothing to translate yet
             if (newX >= minX && newX <= maxX) xPosition = newX;
             if (newY >= minY && newY <= maxY) yPosition = newY;
             return;
@@ -77,20 +89,19 @@ public abstract class Fighter {
     }
 
     public Projectile shoot() {
-        // guard: make sure shape and weapon exist
-        if (fighterShape == null || currentweapon == null) return null;
+        if (fighterShape == null || weapons.isEmpty()) return null;
 
+        Weapon weapon = getCurrentWeapon();
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastshoot >= currentweapon.getCooldown()) {
-            lastshoot= currentTime;
-            double startOffset = (facingright == true) ? fighterShape.getBoundsInLocal().getWidth() : 0;
-            double projectileStartX = xPosition + startOffset;
+        if (currentTime - lastShoot >= weapon.getCooldown()) {
+            lastShoot = currentTime;
+            double startOffset = facingRight ? fighterShape.getBoundsInLocal().getWidth() : 0;
             return new Projectile(
-                    projectileStartX,
+                    xPosition + startOffset,
                     yPosition + fighterShape.getBoundsInLocal().getHeight() / 2,
-                    currentweapon.getProjectileSpeed(),
-                    currentweapon.getDamage(),
-                    facingright,
+                    weapon.getProjectileSpeed(),
+                    weapon.getDamage(),
+                    facingRight,
                     this
             );
         }
@@ -98,25 +109,26 @@ public abstract class Fighter {
     }
 
     public void decreaseHealth(int damage) {
-        this.health -= damage;
-        if (this.health < 0) {
-            this.health = 0;
+        health -= damage;
+        if (health < 0) health = 0;
+    }
+
+    public void setFacingRight(boolean facingRight) {
+        this.facingRight = facingRight;
+    }
+
+    public double getX() { return xPosition; }
+    public double getY() { return yPosition; }
+    public int getMaxHp() { return maxHp; }
+
+    public void addWeapon(Weapon weapon) { weapons.add(weapon); }
+
+    public Weapon getCurrentWeapon() { return weapons.get(currentWeaponIndex); }
+
+    public void switchWeapon() {
+        if (weapons.size() > 1) {
+            currentWeaponIndex = (currentWeaponIndex + 1) % weapons.size();
+            System.out.println(name + " switched to " + getCurrentWeapon().getName());
         }
-
-    }
-
-    public void setFacingright(boolean b) {
-    }
-
-    public double getX() {
-        return xPosition;
-    }
-
-    public double getY() {
-        return yPosition;
-    }
-
-    public int getMaxHp() {
-        return MaxHp;
     }
 }

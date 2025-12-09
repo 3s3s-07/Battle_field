@@ -24,48 +24,47 @@ public class InputHandler {
     public void handleKeyPressed(KeyEvent event) {
         activeKeys.add(event.getCode());
 
-        if (event.getCode() == KeyCode.F) {
-            Projectile p = player1.shoot();
-            if (p != null && gameController != null) {
-                gameController.addProjectile(p);
-            }
-        } else if (event.getCode() == KeyCode.L) {
-            Projectile p = player2.shoot();
-            if (p != null && gameController != null) {
-                gameController.addProjectile(p);
-            }
-        }
+        // Player 1 shoot (F) and switch weapon (Q)
+        if (event.getCode() == KeyCode.F) shoot(player1);
+        else if (event.getCode() == KeyCode.Q) player1.switchWeapon();
+
+            // Player 2 shoot (L) and switch weapon (E)
+        else if (event.getCode() == KeyCode.L) shoot(player2);
+        else if (event.getCode() == KeyCode.E) player2.switchWeapon();
     }
 
     public void handleKeyReleased(KeyEvent event) {
         activeKeys.remove(event.getCode());
     }
 
+    private void shoot(Fighter player) {
+        if (gameController == null) return;
+        Projectile p = player.shoot();
+        if (p != null) {
+            gameController.addProjectile(p);
+        }
+    }
+
     public void handleMovement() {
-        // guard in case the controller isn't set yet
         if (gameController == null) return;
 
         double arenaWidth = gameController.getArenawidth();
         double arenaHeight = gameController.getArenaheight();
-        double halfLineX = arenaWidth / 2;
 
-        double p1MaxX = arenaWidth;
+        // Player 1 movement (WASD)
+        if (activeKeys.contains(KeyCode.W)) player1.move("UP", 0, arenaWidth, 0, arenaHeight);
+        if (activeKeys.contains(KeyCode.S)) player1.move("DOWN", 0, arenaWidth, 0, arenaHeight);
+        if (activeKeys.contains(KeyCode.A)) player1.move("LEFT", 0, arenaWidth, 0, arenaHeight);
+        if (activeKeys.contains(KeyCode.D)) player1.move("RIGHT", 0, arenaWidth, 0, arenaHeight);
 
-        double p2MinX = 0;
-
-        if (activeKeys.contains(KeyCode.W)) player1.move("UP", 0, p1MaxX, 0, arenaHeight);
-        if (activeKeys.contains(KeyCode.S)) player1.move("DOWN", 0, p1MaxX, 0, arenaHeight);
-        if (activeKeys.contains(KeyCode.A)) player1.move("LEFT", 0, p1MaxX, 0, arenaHeight);
-        if (activeKeys.contains(KeyCode.D)) player1.move("RIGHT", 0, p1MaxX, 0, arenaHeight);
-
-        if (activeKeys.contains(KeyCode.UP)) player2.move("UP", p2MinX, arenaWidth, 0, arenaHeight);
-        if (activeKeys.contains(KeyCode.DOWN)) player2.move("DOWN", p2MinX, arenaWidth, 0, arenaHeight);
-        if (activeKeys.contains(KeyCode.LEFT)) player2.move("LEFT", p2MinX, arenaWidth, 0, arenaHeight);
-        if (activeKeys.contains(KeyCode.RIGHT)) player2.move("RIGHT", p2MinX, arenaWidth, 0, arenaHeight);
+        // Player 2 movement (Arrow Keys)
+        if (activeKeys.contains(KeyCode.UP)) player2.move("UP", 0, arenaWidth, 0, arenaHeight);
+        if (activeKeys.contains(KeyCode.DOWN)) player2.move("DOWN", 0, arenaWidth, 0, arenaHeight);
+        if (activeKeys.contains(KeyCode.LEFT)) player2.move("LEFT", 0, arenaWidth, 0, arenaHeight);
+        if (activeKeys.contains(KeyCode.RIGHT)) player2.move("RIGHT", 0, arenaWidth, 0, arenaHeight);
     }
+
     public void setGameController(GameManger gm) {
-        this.gameController= gm;
+        this.gameController = gm;
     }
-    private double getArenaWidthSafe() {
-        return (gameController == null) ? 0 : gameController.getArenawidth();}
 }

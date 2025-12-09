@@ -52,7 +52,7 @@ public class BattleArenaApp extends Application {
             Fighter p2 = createFighter(p2Select.getValue(), WIDTH - 150, HEIGHT / 2);
 
             // Make player2 face left so its shots travel toward player1
-            p2.setFacingright(false);
+            p2.setFacingRight(false);
 
             primaryStage.setScene(createGameScene(p1, p2));
         });

@@ -1,4 +1,5 @@
 package com.example.battle_graphics.base;
+
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -27,14 +28,9 @@ public class Projectile {
 
     public void update() {
         if (!active) return;
-        if (directionRight) {
-            x += speed;
-        } else {
-            x -= speed;
-        }
+        x += directionRight ? speed : -speed;
         shape.setX(x);
     }
-
 
     public boolean isOutOfBounds() {
         return x < 0 || x > 800;
@@ -53,7 +49,7 @@ public class Projectile {
     }
 
     public void deactivate() {
-        this.active = false;
+        active = false;
         shape.setVisible(false);
     }
 
