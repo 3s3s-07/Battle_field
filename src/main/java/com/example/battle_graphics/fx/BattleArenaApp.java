@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class BattleArenaApp extends Application {
@@ -89,11 +90,13 @@ public class BattleArenaApp extends Application {
         // Create fighter shapes
         p1.createShape();
         p2.createShape();
-
         // Arena Pane
         Pane gamePane = new Pane();
         gamePane.setPrefSize(WIDTH, HEIGHT);
-
+        javafx.scene.shape.Line midline = new javafx.scene.shape.Line(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
+        midline.setStroke(Color.GRAY);
+        midline.setStrokeWidth(2);
+        gamePane.getChildren().addAll(midline);
         // Health bars
         ProgressBar hp1 = new ProgressBar(1.0);
         ProgressBar hp2 = new ProgressBar(1.0);
