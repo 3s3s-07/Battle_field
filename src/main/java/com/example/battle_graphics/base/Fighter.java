@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 public abstract class Fighter {
     private String name;
     private int health;
+    private int MaxHp;
     private double speed;
     protected double xPosition, yPosition;
     protected Weapon currentweapon;
@@ -15,12 +16,13 @@ public abstract class Fighter {
     public Fighter() {
     }
 
-    public Fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot, Color fighterColor) {
+    public Fighter(String name, int health, double x, double y, double speed, Weapon currentweapon, boolean facingright, long lastshoot, Color fighterColor,int MaxHp) {
         this.name = name;
         this.health = health;
         this.xPosition = x;
         this.yPosition = y;
         this.speed = speed;
+        this.MaxHp=MaxHp;
         this.currentweapon = currentweapon;
         this.lastshoot = lastshoot;
         this.facingright = facingright;
@@ -112,5 +114,9 @@ public abstract class Fighter {
 
     public double getY() {
         return yPosition;
+    }
+
+    public int getMaxHp() {
+        return MaxHp;
     }
 }
