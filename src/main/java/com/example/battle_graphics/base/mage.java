@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 public class mage extends Fighter {
 
     public mage(double x, double y) {
-        super("Mage", 90, x, y, 4.5, new MagicWand(), true, 0, Color.PURPLE);
+        super("Mage", 90, x, y, 4.5, new MagicWand(), true, 0, Color.PURPLE,90);
     }
 
     @Override

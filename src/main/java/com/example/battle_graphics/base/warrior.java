@@ -4,7 +4,7 @@ import javafx.scene.shape.Rectangle;
 public class warrior extends Fighter {
 
     public warrior(double x,double y){
-        super("Warrior", 150, x, y, 3, new Pistol(), true, 0, Color.DARKRED);
+        super("Warrior", 150, x, y, 3, new Pistol(), true, 0, Color.DARKRED,150);
     }
     @Override
     public void createShape() {
