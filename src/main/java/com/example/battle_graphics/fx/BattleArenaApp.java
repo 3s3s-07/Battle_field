@@ -1,13 +1,12 @@
 package com.example.battle_graphics.fx;
 
 import com.example.battle_graphics.base.*;
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -17,7 +16,10 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.shape.Shape;
 
-public class BattleArenaApp extends Application {
+/**
+ * BattleArenaApp (updated) — uses HeartHealthBar in the game scene.
+ */
+public class BattleArenaApp extends javafx.application.Application {
 
     private final double WIDTH = 900;
     private final double HEIGHT = 600;
@@ -50,7 +52,6 @@ public class BattleArenaApp extends Application {
         Button startBtn = new Button("Start");
         startBtn.setPrefWidth(180);
         startBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
-        // updated call site to renamed method
         startBtn.setOnAction(e -> {
             System.out.println("Start (title) pressed");
             primaryStage.setScene(buildSelectionScene());
@@ -59,7 +60,6 @@ public class BattleArenaApp extends Application {
         Button howToBtn = new Button("How to Play");
         howToBtn.setPrefWidth(180);
         howToBtn.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;");
-        // updated call site to renamed method
         howToBtn.setOnAction(e -> buildHowToPlay());
 
         Button exitBtn = new Button("Exit");
@@ -80,7 +80,6 @@ public class BattleArenaApp extends Application {
     }
 
     // Simple informational dialog laid out as a Scene replacement (keeps it lightweight)
-    // renamed to avoid potential name collisions
     private void buildHowToPlay() {
         Label header = new Label("How to Play");
         header.setFont(Font.font("Arial", 28));
@@ -113,7 +112,7 @@ public class BattleArenaApp extends Application {
     }
 
     // ------------------------------------------
-    // 1) Character Selection Screen (renamed)
+    // 1) Character Selection Screen
     // ------------------------------------------
     private Scene buildSelectionScene() {
 
@@ -125,7 +124,6 @@ public class BattleArenaApp extends Application {
         p2Select.getItems().addAll("Warrior", "Mage", "Archer");
         p2Select.setValue("Archer");
 
-        // Make title visible on dark background and labels readable
         Label titleLabel = new Label("🎮 Select Fighters");
         titleLabel.setFont(Font.font("Arial", 22));
         titleLabel.setTextFill(Color.web("#ffffff"));
@@ -138,7 +136,6 @@ public class BattleArenaApp extends Application {
         Button startButton = new Button("Start Battle");
         startButton.setStyle("-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;");
 
-        // add a debug print to verify the button handler fires
         startButton.setOnAction(e -> {
             System.out.println("Start Battle pressed (selection)");
             Fighter p1 = createFighter(p1Select.getValue(), 100, HEIGHT / 2);
@@ -187,27 +184,20 @@ public class BattleArenaApp extends Application {
         // Create fighter shapes
         p1.createShape();
         p2.createShape();
+
         // Arena Pane
         Pane gamePane = new Pane();
         gamePane.setPrefSize(WIDTH, HEIGHT);
+
+        // center guideline
         javafx.scene.shape.Line midline = new javafx.scene.shape.Line(WIDTH / 2, 0, WIDTH / 2, HEIGHT);
-        midline.setStroke(Color.GRAY);
+        midline.setStroke(Color.RED);
         midline.setStrokeWidth(2);
         gamePane.getChildren().addAll(midline);
-        // Health bars
-        ProgressBar hp1 = new ProgressBar(1.0);
-        ProgressBar hp2 = new ProgressBar(1.0);
 
-        hp1.setPrefWidth(200);
-        hp2.setPrefWidth(200);
-
-        hp1.setLayoutX(20);
-        hp1.setLayoutY(20);
-
-        hp2.setLayoutX(WIDTH - 220);
-        hp2.setLayoutY(20);
-
-        gamePane.getChildren().addAll(hp1, hp2);
+        // Health hearts (replace ProgressBars)
+        HeartHealthBar hp1 = new HeartHealthBar(Color.RED);
+        HeartHealthBar hp2 = new HeartHealthBar(Color.RED);
 
         // InputHandler created BEFORE GameManger but without controller (will be set)
         InputHandler handler = new InputHandler(p1, p2, null);
@@ -223,8 +213,7 @@ public class BattleArenaApp extends Application {
                 HEIGHT,
                 () -> {
                     // ensure UI update happens on FX thread
-                    javafx.application.Platform.runLater(() -> {
-                        // updated to call renamed selection builder
+                    Platform.runLater(() -> {
                         primaryStage.setScene(buildSelectionScene());
                     });
                 }

@@ -1,23 +1,28 @@
 package com.example.battle_graphics.fx;
+
 import com.example.battle_graphics.base.Fighter;
 import com.example.battle_graphics.base.Projectile;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 import javafx.scene.text.Font;
 import javafx.scene.effect.DropShadow;
 import javafx.util.Duration;
+
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Updated GameManger to use HeartHealthBar for hp1/hp2.
+ */
 public class GameManger {
 
     private Fighter player1;
@@ -26,14 +31,14 @@ public class GameManger {
     private List<Projectile> projectiles;
     private InputHandler input;
     private AnimationTimer gameLoop;
-    private final ProgressBar hp1;
-    private final ProgressBar hp2;
-    private  final double arenawidth;
-    private  final double arenaheight;
+    private final HeartHealthBar hp1;
+    private final HeartHealthBar hp2;
+    private final double arenawidth;
+    private final double arenaheight;
     private boolean gameOver = false;
     private final Runnable onPlayAgain;
 
-    public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler, ProgressBar hp1, ProgressBar hp2, double arenawidth, double arenaheight, Runnable onPlayAgain) {
+    public GameManger(Fighter p1, Fighter p2, Pane pane, InputHandler handler, HeartHealthBar hp1, HeartHealthBar hp2, double arenawidth, double arenaheight, Runnable onPlayAgain) {
         this.player1 = p1;
         this.player2 = p2;
         this.gamePane = pane;
@@ -55,7 +60,23 @@ public class GameManger {
             player2.getFighterShape().setTranslateY(player2.getY());
         }
 
+        // place fighters in pane
         gamePane.getChildren().addAll(player1.getFighterShape(), player2.getFighterShape());
+
+        // position HP hearts in corners (you can adjust positions)
+        // hp1 top-left; hp2 top-right
+        hp1.setDisplaySize(48, 48);
+        hp1.setLayoutX(20);
+        hp1.setLayoutY(16);
+        hp1.setProgress((double) player1.getHealth() / player1.getMaxHp());
+
+        hp2.setDisplaySize(48, 48);
+        hp2.setLayoutX(arenawidth - 68);
+        hp2.setLayoutY(16);
+        hp2.setProgress((double) player2.getHealth() / player2.getMaxHp());
+
+        gamePane.getChildren().addAll(hp1, hp2);
+
         startLoop();
         if (this.input != null) {
             this.input.setGameController(this);
@@ -87,6 +108,7 @@ public class GameManger {
         };
         gameLoop.start();
     }
+
     private void update() {
         if (gameOver) return;
 
@@ -95,13 +117,14 @@ public class GameManger {
         checkCollisions();
         updateHealthBars();
         checkWinner();
-
     }
+
     public void addProjectile(Projectile p) {
         if (p == null || p.getShape() == null) return;
         projectiles.add(p);
         gamePane.getChildren().add(p.getShape());
     }
+
     private void updateProjectiles() {
         List<Projectile> toRemove = new ArrayList<>();
         for (Projectile p : projectiles) {
@@ -115,6 +138,7 @@ public class GameManger {
             projectiles.remove(p);
         }
     }
+
     private void checkCollisions() {
         for (Projectile p : projectiles) {
             if (!p.isActive()) continue;
@@ -130,7 +154,6 @@ public class GameManger {
                     p.deactivate();
                 }
             } else {
-                // owner unknown — check both targets (defensive)
                 if (p.getShape().getBoundsInParent().intersects(player1.getFighterShape().getBoundsInParent())) {
                     player1.decreaseHealth(p.getDamage());
                     p.deactivate();
@@ -141,23 +164,26 @@ public class GameManger {
             }
         }
     }
+
     private void updateHealthBars() {
-        hp1.setProgress((double)player1.getHealth() / player1.getMaxHp());
-        hp2.setProgress((double)player2.getHealth() / player2.getMaxHp());
+        // clamp and update hearts
+        double p1 = Math.max(0.0, Math.min(1.0, (double) player1.getHealth() / player1.getMaxHp()));
+        double p2 = Math.max(0.0, Math.min(1.0, (double) player2.getHealth() / player2.getMaxHp()));
+        hp1.setProgress(p1);
+        hp2.setProgress(p2);
     }
+
     private void checkWinner() {
         if (!player1.isAlive()) {
             showWinner("Player 2 Wins!");
         } else if (!player2.isAlive()) {
             showWinner("Player 1 Wins!");
         }
-
     }
 
     private void showWinner(String text) {
         gameOver = true;
         if (gameLoop != null) gameLoop.stop();
-        // Build an overlay on the JavaFX thread
         Platform.runLater(() -> {
             StackPane overlay = new StackPane();
             overlay.setPrefSize(arenawidth, arenaheight);
@@ -186,28 +212,22 @@ public class GameManger {
             overlay.getChildren().addAll(bg, box);
             overlay.setMouseTransparent(false);
 
-            // fade in animation for a nicer effect
             overlay.setOpacity(0);
             FadeTransition fade = new FadeTransition(Duration.millis(350), overlay);
             fade.setFromValue(0);
             fade.setToValue(1.0);
             fade.play();
 
-            // Add overlay
             gamePane.getChildren().add(overlay);
             overlay.toFront();
 
-            // disable input
             if (input != null) {
                 input.setGameController(null);
             }
 
-            // Play Again behavior: cleanup and call callback
             playBtn.setOnAction(e -> {
                 cleanupAfterGame();
-                if (onPlayAgain != null) {
-                    onPlayAgain.run();
-                }
+                if (onPlayAgain != null) onPlayAgain.run();
             });
 
             exitBtn.setOnAction(e -> {
@@ -218,22 +238,18 @@ public class GameManger {
     }
 
     private void cleanupAfterGame() {
-        // Stop loop if not already stopped
         gameOver = true;
         if (gameLoop != null) {
             gameLoop.stop();
         }
-        // remove and deactivate any projectiles
         for (Projectile p : new ArrayList<>(projectiles)) {
             p.deactivate();
             if (p.getShape() != null) gamePane.getChildren().remove(p.getShape());
         }
         projectiles.clear();
 
-        // detach input to avoid NPEs while not in game
         if (input != null) {
             input.setGameController(null);
-            // also clear active key state if you add a method to InputHandler later
         }
     }
 }
