@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.scene.text.Font;
 
 public class BattleArenaApp extends Application {
 
@@ -25,11 +26,83 @@ public class BattleArenaApp extends Application {
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
-        primaryStage.setTitle("Battle Arena – Character Select");
+        primaryStage.setTitle("Battle Arena");
 
-        // Load first screen (selection)
-        primaryStage.setScene(createSelectionScene());
+        // Start with the title / splash scene, then proceed to selection
+        primaryStage.setScene(createTitleScene());
         primaryStage.show();
+    }
+
+    // ------------------------------------------
+    // Title / Splash Screen shown before character select
+    // ------------------------------------------
+    private Scene createTitleScene() {
+        Label title = new Label("BATTLE ARENA");
+        title.setFont(Font.font("Arial", 56));
+        title.setTextFill(Color.web("#ffffff"));
+        title.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6,0,0,2);");
+
+        Label subtitle = new Label("Two-player local combat. Choose fighters and battle!");
+        subtitle.setFont(Font.font("Arial", 18));
+        subtitle.setTextFill(Color.web("#dddddd"));
+
+        Button startBtn = new Button("Start");
+        startBtn.setPrefWidth(180);
+        startBtn.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
+        startBtn.setOnAction(e -> primaryStage.setScene(createSelectionScene()));
+
+        Button howToBtn = new Button("How to Play");
+        howToBtn.setPrefWidth(180);
+        howToBtn.setStyle("-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;");
+        howToBtn.setOnAction(e -> showHowToPlay());
+
+        Button exitBtn = new Button("Exit");
+        exitBtn.setPrefWidth(180);
+        exitBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold;");
+        exitBtn.setOnAction(e -> primaryStage.close());
+
+        VBox buttonBox = new VBox(12, startBtn, howToBtn, exitBtn);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        VBox root = new VBox(18);
+        root.setPadding(new Insets(60));
+        root.setAlignment(Pos.CENTER);
+        root.setStyle("-fx-background-color: linear-gradient(#2c3e50, #1a252f);");
+        root.getChildren().addAll(title, subtitle, buttonBox);
+
+        return new Scene(root, WIDTH, HEIGHT);
+    }
+
+    // Simple informational dialog laid out as a Scene replacement (keeps it lightweight)
+    private void showHowToPlay() {
+        Label header = new Label("How to Play");
+        header.setFont(Font.font("Arial", 28));
+        header.setTextFill(Color.WHITE);
+
+        Label lines = new Label(
+                "Player 1: Move with WASD, Shoot = F, Switch Weapon = Q\n" +
+                        "Player 2: Move with Arrow Keys, Shoot = L, Switch Weapon = E\n\n" +
+                        "Each fighter has multiple weapons — switch to find the best one.\n" +
+                        "First player to reduce the opponent's health to 0 wins."
+        );
+        lines.setFont(Font.font("Arial", 14));
+        lines.setTextFill(Color.web("#e9e9e9"));
+
+        Button back = new Button("Back");
+        back.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;");
+        back.setOnAction(e -> primaryStage.setScene(createTitleScene()));
+
+        VBox box = new VBox(12, header, lines, back);
+        box.setAlignment(Pos.CENTER);
+        box.setPadding(new Insets(24));
+        box.setStyle("-fx-background-color: rgba(20,20,20,0.6); -fx-background-radius: 8;");
+
+        VBox root = new VBox(10, box);
+        root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(40));
+        root.setStyle("-fx-background-color: linear-gradient(#2c3e50, #1a252f);");
+
+        primaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
     }
 
     // ------------------------------------------
