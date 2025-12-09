@@ -43,7 +43,7 @@ public class BattleArenaApp extends Application {
         title.setTextFill(Color.web("#ffffff"));
         title.setStyle("-fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 6,0,0,2);");
 
-        Label subtitle = new Label("Two-player local combat. Choose fighters and battle!");
+        Label subtitle = new Label("SHOOT AND RUN (ممنوع دخول هنا أحمد!)");
         subtitle.setFont(Font.font("Arial", 18));
         subtitle.setTextFill(Color.web("#dddddd"));
 
